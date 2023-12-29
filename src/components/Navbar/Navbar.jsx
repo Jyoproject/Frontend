@@ -59,7 +59,7 @@ const Navbar = () => {
 							{/* <div onClick={() => navigate('/app/signin')} className='cursor-pointer '>
 								Signin
 							</div> */}
-							<div  className='flex flex-row items-center justify-center gap-2 border-2 border-white cursor-pointer rounded-lg py-2 px-4  '>
+							<div  className='flex flex-row items-center justify-center gap-2 border-2 border-black dark:border-white cursor-pointer rounded-lg py-2 px-4  '>
 								<Link to='/signin'>
 									Get started
 								</Link>
@@ -69,8 +69,8 @@ const Navbar = () => {
 							</div>
 							<button className='font-medium' onClick={() => {
                 setColorMode(colorMode === ColorMode.dark ? ColorMode.light : ColorMode.dark)
-                }}>{colorMode === ColorMode.dark ? '' : ''}
-								Light
+                }}>{colorMode === ColorMode.dark ? 'Light' : 'Dark'}
+								
 							</button>
 							
 						</div>

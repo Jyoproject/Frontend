@@ -3,7 +3,7 @@
 const Home = () => {
 	return (
 		<div>
-			<div className="text-4xl text-white font-bold dark:text-pink-500">
+			<div className="text-4xl text-black font-bold dark:text-white">
 				Home
 			</div>
 		</div>
