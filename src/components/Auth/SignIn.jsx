@@ -1,12 +1,28 @@
 // import router from "next/router"
-
+import React, { useEffect, useState } from "react";
 // import { signIn } from "next-auth/react"
+import {signInWithPopup} from "firebase/auth";
+import {auth,provider} from "../../firebase";
+
+import { Link } from 'react-router-dom';
 
 const Signin = () => {
 
 	// const handleSignIn = () => {
 	// 	signIn('google', {callbackUrl: '/app/dashboard'})
 	// }
+	const [value,setValue] = useState('')
+	const handleClick =()=>{
+		signInWithPopup(auth,provider).then((data)=>{
+		setValue(data.user.email)
+		localStorage.setItem("email",data.user.email)
+		})
+	}
+
+	useEffect(()=>{
+		setValue(localStorage.getItem('email'))
+	})
+	
 
 	return (
 		<div className="flex flex-row  w-full bg-[#111111] text-white">
@@ -22,7 +38,9 @@ const Signin = () => {
 			</div>
 			<div className="w-full">
 				<div  className="text-3xl font-medium cursor-pointer absolute top-0 right-0 pt-10 pr-[5vh]">
-					Name
+					<Link to="/">
+						Name
+					</Link>	
 				</div>
 				<div className="flex flex-col justify-center gap-8 items-center h-screen">
 					<div className="font-bold text-4xl">
@@ -41,7 +59,7 @@ const Signin = () => {
 						/>
 					</div> */}
 					<div className="flex flex-row items-center gap-2 ">
-						<div  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+						<div onClick={handleClick}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Google
 						</div>
 						{/* onClick={() => handleSignIn()} */}

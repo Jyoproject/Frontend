@@ -6,9 +6,10 @@ import SignIn from './components/Auth/SignIn';
 import Chat from './components/Chat/Chat';
 
 
+
 function App() {
   return (
-    < >
+    <div className='bg-white dark:bg-black h-screen'>
       <Navbar />
       <div>
         <Routes>        
@@ -19,7 +20,7 @@ function App() {
         </Routes>
       </div>
       {/* <Landing /> */}
-    </>
+    </div>
   );
 }
 

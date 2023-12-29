@@ -1,12 +1,14 @@
 
-
+import { Link } from 'react-router-dom';
 
 
 const Chat = () => {
 	return (
 		<>
 			<div className="text-white">
-				Chat
+				<Link to='/'>
+					Chat	
+				</Link>
 			</div>
 		</>
 	)
