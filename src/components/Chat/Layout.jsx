@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import {  ChatLine, LoadingChatLine } from './ChatLine'
 import { useCookies } from 'react-cookie'
 import { addDoc, collection} from "firebase/firestore";
-import {db, auth} from "../firebase-config";
+import {db, auth} from "../../firebase";
 
 const COOKIE_NAME = 'copilot-for-lawyers'
 
@@ -11,7 +11,7 @@ const COOKIE_NAME = 'copilot-for-lawyers'
 export const initialMessages = [
 	{
 	  who: 'bot',
-	  message: 'Yo! Ready to step out!',
+	  message: '',
 	},
 ]
 
@@ -21,7 +21,7 @@ const InputMessage = ({ input, setInput, sendMessage }) => (
       type="text"
       aria-label="chat input"
       required
-      className=" flex-auto appearance-none rounded-md border border-white bg-black px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-white focus:outline-none"
+      className=" flex-auto appearance-none rounded-md bg-transparent border  px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-black focus:outline-none"
       value={input}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
@@ -95,7 +95,7 @@ const Layout = () => {
 	}
 
 	return (
-		<div className="rounded-2xl  lg:w-[40%] md:w-[80%] w-[90%] mt-10 sm:mt-0  h-[80%] overflow-auto flex flex-col justify-between  border-zinc-100 border p-6">
+		<div className="  overflow-auto flex flex-col justify-between w-[70%]  p-6">
 			<div>
 				{messages.map(({ message, who }, index) => (
 					<ChatLine key={index} who={who} message={message} />
@@ -105,7 +105,7 @@ const Layout = () => {
 			</div>
 			<div className="  ">	
 				{messages.length < 2 && (
-					<span className="mx-auto text-gray-600 clear-both">
+					<span className="mx-auto text-white clear-both">
 						Type a message to start the conversation
 					</span>
 				)}

@@ -42,11 +42,7 @@ export function ChatLine({ who = "bot", message }) {
   const formatteMessage = convertNewLines(message)
 
   return (
-    <div
-      className={
-        who != "bot" ? "float-right clear-both" : "float-left clear-both"
-      }
-    >
+    <div>
       <BalancerWrapper>
         <div className="float-right mb-5 rounded-lg bg-white px-4 py-5  sm:px-6">
           <div className="flex space-x-3">
