@@ -72,7 +72,7 @@ const Layout = () => {
 		setMessages(newMessages)
 		const last10mesages = newMessages.slice(-10)
 
-		const response = await fetch('/api/assistant/chat', {
+		const response = await fetch('https://backend.advocateally.com/chat', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json',
@@ -85,7 +85,7 @@ const Layout = () => {
 		const data = await response.json()
 
 		// strip out white spaces from the bot message
-		const botNewMessage = data.text.trim()
+		const botNewMessage = data.message.trim()
 
 		setMessages([
 			...newMessages,
