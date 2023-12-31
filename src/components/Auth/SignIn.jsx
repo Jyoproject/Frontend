@@ -1,21 +1,27 @@
 // import router from "next/router"
-import React, { useEffect, useState } from "react";
+import React, {  useEffect, useState } from "react";
 // import { signIn } from "next-auth/react"
 import {signInWithPopup} from "firebase/auth";
-import {auth,provider} from "../../firebase";
+import {auth, googleProvider} from "../../firebase";
+import {getDatabse, ref, push} from "firebase/database"
+import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
 
 const Signin = () => {
+	const navigate = useNavigate();
+
+	
 
 	// const handleSignIn = () => {
 	// 	signIn('google', {callbackUrl: '/app/dashboard'})
 	// }
 	const [value,setValue] = useState('')
 	const handleClick =()=>{
-		signInWithPopup(auth,provider).then((data)=>{
-		setValue(data.user.email)
-		localStorage.setItem("email",data.user.email)
+		signInWithPopup(auth, googleProvider).then((data)=>{
+			setValue(data.user.email)
+			localStorage.setItem("email",data.user.email)
+			navigate('/chat'); 
 		})
 	}
 
