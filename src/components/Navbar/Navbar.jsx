@@ -36,13 +36,9 @@ const Navbar = () => {
 			{signin || chat ? 
 				<></>
 			:
-			<div className="flex text-black dark:text-white flex-row  w-full pt-5 justify-evenly fixed  z-20 items-center">
-				<div className="text-3xl font-medium  cursor-pointer flex items-center "  >
-					<Link to="/">
-						Name
-					</Link>	
-				</div>
-				<div className="md:flex hidden flex-row gap-10   ">		
+			<div className="flex text-black dark:text-white flex-row  w-full py-10 justify-evenly  z-20 items-center">
+				
+				<div className="md:flex hidden flex-row gap-10">		
 					<div className="cursor-pointer"  >
 						<Link to="/chat">
 							Chat	
@@ -52,6 +48,11 @@ const Navbar = () => {
 					<div className="cursor-pointer" > 
 						Contact Us
 					</div>
+				</div>
+				<div className="text-2xl font-medium  cursor-pointer flex items-center "  >
+					<Link to="/">
+						Name
+					</Link>	
 				</div>
 				<div className="flex flex-row items-center justify-center gap-4">
 					{/* {!session ?  */}
@@ -67,10 +68,8 @@ const Navbar = () => {
 								
 								{/* <img src="/images/arrow-right.svg" draggable="false" /> */}
 							</div>
-							<button className='font-medium' onClick={() => {
-                setColorMode(colorMode === ColorMode.dark ? ColorMode.light : ColorMode.dark)
-                }}>{colorMode === ColorMode.dark ? 'Light' : 'Dark'}
-								
+							<button className='font-medium' onClick={() => {setColorMode(colorMode === ColorMode.dark ? ColorMode.light : ColorMode.dark)}}>
+								{colorMode === ColorMode.dark ? 'Light' : 'Dark'}
 							</button>
 							
 						</div>

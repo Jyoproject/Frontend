@@ -8,7 +8,7 @@ const Chat = () => {
 	return (
 		<>
 			<div className="text-white bg-black flex flex-row w-full h-screen ">
-				<div className='w-80 border-r-2 py-4 px-6 h-screen flex flex-col justify-between'>
+				<div className='w-80  py-4 px-6 h-screen flex flex-col justify-between'>
 					<div className='flex flex-row justify-between '>
 						<div>
 							<Link to='/'>
@@ -16,12 +16,14 @@ const Chat = () => {
 							</Link>
 						</div>
 						<div>
-							new
+							<Link to="/chat">
+								new
+							</Link>
 						</div>
 					</div>
 					<div className='bottom-0 '>
 						<div>
-							{auth?.currentUser?.displayName}
+							{auth.currentUser?.displayName}
 						</div>
 					</div>
 				</div>

@@ -15,7 +15,7 @@ export const initialMessages = [
 	},
 ]
 
-const InputMessage = ({ input, setInput, sendMessage }) => (
+const InputMessage = ({ input, setInput, sendMessage, createChat }) => (
   <div className="mt-6 flex  clear-both">
     <input
       type="text"
@@ -25,6 +25,7 @@ const InputMessage = ({ input, setInput, sendMessage }) => (
       value={input}
       onKeyDown={(e) => {
         if (e.key === 'Enter') {
+
           sendMessage(input)
           setInput('')
         }
@@ -37,6 +38,7 @@ const InputMessage = ({ input, setInput, sendMessage }) => (
       type="submit"
       className="ml-4 border-2 cursor-pointer rounded-lg w-32 flex flex-row items-center justify-center pt-1.5 pb-1.5" 
       onClick={() => {
+	createChat()
         sendMessage(input)
         setInput('')
       }}
@@ -62,6 +64,7 @@ const Layout = () => {
 
 	const chatsCollectionRef = collection(db, 'chats')
 
+
   	// send message to API /api/chat endpoint
 	const sendMessage = async (message) => {
 		setLoading(true)
@@ -79,7 +82,7 @@ const Layout = () => {
 			},
 			body: JSON.stringify({
 				messages: last10mesages,
-				user: cookie[COOKIE_NAME],
+				user: auth.currentUser.uid,
 			}),
 		})
 		const data = await response.json()
@@ -92,6 +95,17 @@ const Layout = () => {
 			{ message: botNewMessage, who: 'bot' },
 		])
 		setLoading(false)
+	}
+
+	const createChat = async () => {
+		await addDoc(chatsCollectionRef, {
+			sendMessage,
+			messages,
+			author: {
+				name: auth.currentUser.displayName,
+				id: auth.currentUser.uid
+			}
+		})
 	}
 
 	return (
@@ -113,6 +127,7 @@ const Layout = () => {
 					input={input}
 					setInput={setInput}
 					sendMessage={sendMessage}
+					createChat={createChat}
 				/>
 			</div>	
 		</div>
