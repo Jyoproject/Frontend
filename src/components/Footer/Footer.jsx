@@ -10,7 +10,7 @@ const Footer = () => {
 	return (
 		<footer className="bg-footer">
 			<Container className={undefined}>
-				<div className="py-16 flex flex-col items-center">
+				<div className="pt-16 flex flex-col items-center">
 					<div className="mx-auto h-10 w-auto flex items-center justify-center font-bold text-2xl text-white" >
 						Name
 					</div>
