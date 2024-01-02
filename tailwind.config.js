@@ -6,8 +6,11 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      colors:{
+        'footer': '#5C49F5'
+      },
       backgroundImage: {
-        'signin': "url('/src/images/signin.jpg')",
+        'signin': "url('/public/images/signin.jpg')",
       }
     },
   },

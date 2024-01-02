@@ -1,8 +1,8 @@
 // import router from "next/router"
 import React, {  useEffect, useState } from "react";
 // import { signIn } from "next-auth/react"
-import {signInWithPopup} from "firebase/auth";
-import {auth, googleProvider} from "../../firebase";
+import {signInWithPopup,FacebookAuthProvider, OAuthProvider} from "firebase/auth";
+import {auth, googleProvider, facebookProvider, appleProvider} from "../../firebase";
 import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
@@ -16,12 +16,80 @@ const Signin = () => {
 	// 	signIn('google', {callbackUrl: '/app/dashboard'})
 	// }
 	const [value,setValue] = useState('')
-	const handleClick =()=>{
-		signInWithPopup(auth, googleProvider).then((data)=>{
+	const googleSignin =()=>{
+		signInWithPopup(auth, googleProvider)
+		.then((data)=>{
 			setValue(data.user.email)
 			localStorage.setItem("email",data.user.email)
 			navigate('/chat'); 
 		})
+		.catch((error) => {
+			// Handle Errors here.
+			const errorCode = error.code;
+			const errorMessage = error.message;
+			// The email of the user's account used.
+			const email = error.user?.email;
+			console.log(errorMessage)
+			// The AuthCredential type that was used.
+			// const credential = FacebookAuthProvider.credentialFromError(error);
+
+			// ...
+		});
+	}
+
+	const facebookSignin =()=>{
+		signInWithPopup(auth, facebookProvider)
+			.then((result) => {
+				// The signed-in user info.
+				const user = result.user;
+
+				// This gives you a Facebook Access Token. You can use it to access the Facebook API.
+				const credential = FacebookAuthProvider.credentialFromResult(result);
+				const accessToken = credential.accessToken;
+
+				// IdP data available using getAdditionalUserInfo(result)
+				// ...
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// The email of the user's account used.
+				const email = error.customData.email;
+				// The AuthCredential type that was used.
+				const credential = FacebookAuthProvider.credentialFromError(error);
+				console.log(errorMessage)
+
+				// ...
+			});
+	}
+
+	const appleSignin =()=>{
+		signInWithPopup(auth, appleProvider)
+			.then((result) => {
+				// The signed-in user info.
+				const user = result.user;
+
+				// Apple credential
+				const credential = OAuthProvider.credentialFromResult(result);
+				const accessToken = credential.accessToken;
+				const idToken = credential.idToken;
+
+				// IdP data available using getAdditionalUserInfo(result)
+				// ...
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+				// The email of the user's account used.
+				const email = error.customData.email;
+				console.log(errorMessage)
+				// The credential that was used.
+				const credential = OAuthProvider.credentialFromError(error);
+
+				// ...
+			});
 	}
 
 	useEffect(()=>{
@@ -63,9 +131,15 @@ const Signin = () => {
 							className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
 						/>
 					</div> */}
-					<div className="flex flex-row items-center gap-2 ">
-						<div onClick={handleClick}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+					<div className="flex flex-col items-center gap-2 ">
+						<div onClick={googleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Google
+						</div>
+						<div onClick={facebookSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+							Sign In with Facebook
+						</div>
+						<div onClick={appleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+							Sign In with Apple
 						</div>
 						{/* onClick={() => handleSignIn()} */}
 						{/* <div onClick={() => handleSignOut()} className="border-2 cursor-pointer rounded-lg w-48 flex flex-row items-center justify-center pt-2 pb-2">

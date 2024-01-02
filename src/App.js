@@ -4,12 +4,13 @@ import Landing from './components/Landing/Landing';
 import Navbar from './components/Navbar/Navbar';
 import SignIn from './components/Auth/SignIn';
 import Chat from './components/Chat/Chat';
+import Footer from './components/Footer/Footer';
 
 
 
 function App() {
   return (
-    <div className='bg-white dark:bg-black h-screen'>
+    <div className='bg-white dark:bg-black '>
       <Navbar />
       <div>
         <Routes>        
@@ -19,7 +20,7 @@ function App() {
           {/* <Route path="/car"  element={<Cart/>}/> */}
         </Routes>
       </div>
-      {/* <Landing /> */}
+      <Footer />
     </div>
   );
 }
