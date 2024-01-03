@@ -53,31 +53,37 @@ const Home = () => {
 					</div>
 					<div className='flex flex-col justify-center items-start w-4/5 '>
 						<div className='text-right'>
-							<div className='text-5xl font-semibold text-left '>
-								Multplie Features To Rely On!
+							<div className='text-5xl font-semibold text-left w-[45%] leading-tight '>
+								Multiple Features <span className='text-footer'>To Rely On!</span> 
 							</div>
-							<div className='mt-12 text-lg font-semibold dark:text-slate-500 text-slate-700 w-2/3 float-right  '>
+							<div className='mt-5 text-lg font-semibold dark:text-slate-500 text-slate-700 w-2/3 float-right  '>
 								Handle routine documentation and administrative tasks, allowing them to refocus on the more strategic.
 							</div>
 						</div>
-						<div className='mt-5 space-x-5 flex flex-row items-center justify-center'>
-							<div className='flex flex-row items-center gap-5 py-3 px-4 bg-'>
-								<img src="/images/1.svg" alt="1" className='rounded-2xl w-16' />
-								<span className='font-medium text-lg'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								</span>
+						<div className='mt-16 grid-cols-3 grid gap-5'>
+							<div className='flex flex-col justify-center w-full gap-3 py-10 px-5 rounded-lg dark:bg-neutral-900 bg-gray-200   '>
+								<div className='font-medium text-lg dark:text-white'>
+									Multiple Chat Sessions
+								</div>
+								<div className=' dark:text-white'>
+									Get as many sessions as you wish for your queries.
+								</div>
 							</div>
-							<div className='flex flex-row items-center gap-5'>
-								<img src="/images/2.svg" alt="1" className='rounded-2xl w-16' />
-								<span className='font-medium text-lg'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								</span>
+							<div className='flex flex-col justify-center w-full gap-3 py-10 px-5 rounded-lg dark:bg-neutral-900 bg-gray-200   '>
+								<div className='font-medium text-lg dark:text-white'>
+									Text & Voice - Chat
+								</div>
+								<div className=' dark:text-white'>
+									Interact with the chatbot with both text and speech.
+								</div>
 							</div>
-							<div className='flex flex-row items-center gap-5'>
-								<img src="/images/3.svg" alt="1" className='rounded-2xl w-16' />
-								<span className='font-medium text-lg'>
-									Lorem ipsum dolor sit amet consectetur adipisicing elit.
-								</span>
+							<div className='flex flex-col justify-center w-full gap-3 py-10 px-5 rounded-lg dark:bg-neutral-900 bg-gray-200   '>
+								<div className='font-medium text-lg dark:text-white'>
+									Legal Consultancy
+								</div>
+								<div className=' dark:text-white'>
+									Get the most curated and specialized answers to your legal questions.
+								</div>
 							</div>
 						</div>
 					</div>
