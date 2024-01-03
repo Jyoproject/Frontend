@@ -4,13 +4,13 @@ import { Link } from 'react-router-dom';
 const Home = () => {
 	return (
 		<>
-			<div className="py-20">
-				<div className=" p-20 space-y-[15rem] max-w-7xl flex flex-col justify-center items-center mx-auto  text-black  dark:text-white">
-					<div className='justify-center gap-8 flex flex-col items-center'>
+			<div className="md:py-20 py-10">
+				<div className=" md:p-20 p-10 md:space-y-[15rem] space-y-[10rem] max-w-7xl flex flex-col justify-center items-center mx-auto  text-black  dark:text-white">
+					<div className='justify-center gap-8 flex flex-col items-center text-center'>
 						<div>
 							AI Copilot for Lawyers
 						</div>
-						<div className="text-8xl font-bold">
+						<div className="md:text-8xl text-7xl text-center font-bold">
 							AI Copilot for Lawyers
 						</div>
 						<div className="text-xl">
@@ -23,11 +23,11 @@ const Home = () => {
 							{/* <img src="/images/arrow-right.svg" draggable="false" /> */}
 						</div>
 					</div>
-					<div className='flex flex-col justify-center items-start w-4/5'>
-						<div className='text-5xl font-semibold'>
+					<div className='flex flex-col justify-center items-start md:w-4/5'>
+						<div className='md:text-5xl text-4xl font-semibold'>
 							Made For Lawyers
 						</div>
-						<div className='mt-12 text-xl font-semibold dark:text-slate-500 text-slate-700 '>
+						<div className='md:mt-12 md:text-xl mt-5 font-semibold dark:text-slate-500 text-slate-700 '>
 							Handle routine documentation and administrative tasks, allowing them to refocus on the more strategic, high-level and interpersonal requirements of their role.
 						</div>
 						<div className='mt-5 space-y-5'>
@@ -51,16 +51,16 @@ const Home = () => {
 							</div>
 						</div>
 					</div>
-					<div className='flex flex-col justify-center items-start w-4/5 '>
+					<div className='flex flex-col justify-center items-start md:w-4/5 '>
 						<div className='text-right'>
-							<div className='text-5xl font-semibold text-left w-[45%] leading-tight '>
+							<div className='md:text-5xl text-4xl font-semibold text-left md:w-[45%] leading-tight '>
 								Multiple Features <span className='text-footer'>To Rely On!</span> 
 							</div>
-							<div className='mt-5 text-lg font-semibold dark:text-slate-500 text-slate-700 w-2/3 float-right  '>
+							<div className='mt-5 text-lg font-semibold dark:text-slate-500 text-slate-700 md:w-2/3 float-right  '>
 								Handle routine documentation and administrative tasks, allowing them to refocus on the more strategic.
 							</div>
 						</div>
-						<div className='mt-16 grid-cols-3 grid gap-5'>
+						<div className='mt-16 md:grid-cols-3 grid-rows-3 grid gap-5'>
 							<div className='flex flex-col justify-center w-full gap-3 py-10 px-5 rounded-lg dark:bg-neutral-900 bg-gray-200   '>
 								<div className='font-medium text-lg dark:text-white'>
 									Multiple Chat Sessions
