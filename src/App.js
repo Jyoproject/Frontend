@@ -17,7 +17,6 @@ function App() {
           <Route path="/"  element={<Landing />} />
           <Route path="/signin" element={<Auth />}/>
           <Route path="/chat"  element={<Chat />}/>
-          {/* <Route path="/car"  element={<Cart/>}/> */}
         </Routes>
       </div>
       <Footer />

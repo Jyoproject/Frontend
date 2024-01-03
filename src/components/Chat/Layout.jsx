@@ -48,7 +48,7 @@ const InputMessage = ({ input, setInput, sendMessage, createChat }) => (
   </div>
 )
 
-const Layout = () => {
+const Layout = ({id}) => {
 	const [messages, setMessages] = useState(initialMessages)
 	const [input, setInput] = useState('')
 	const [loading, setLoading] = useState(false)
