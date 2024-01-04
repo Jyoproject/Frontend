@@ -2,55 +2,73 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from './Layout';
 
-import {db, auth} from "../../firebase";
+import { db, auth } from "../../firebase";
 
 const Chat = () => {
-	const [chatInstances, setChatInstances] = useState([]);
-	const [nextChatId, setNextChatId] = useState(1);
+  const [chatInstances, setChatInstances] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null);
 
-	const createNewChat = () => {
-		const newChatId = nextChatId;
-		setNextChatId(nextChatId + 1); // Increment for the next chat
-	    
-		const newChatInstances = [...chatInstances];
-		newChatInstances.push(<Layout key={newChatId} id={newChatId} />);
-		setChatInstances(newChatInstances);
-	};
-	return (
-		<>
-			<div className="text-white bg-black flex flex-row w-full h-screen ">
-				<div className='w-80  py-4 px-6 h-screen md:flex hidden flex-col justify-between'>
-					<div className='flex flex-row justify-between '>
-						<div>
-							<Link to='/'>
-								Chat	
-							</Link>
-						</div>
-						<div onClick={createNewChat}>
-							
-								new
-						
-						</div>
-					</div>
-					<div>
-					<ul>
-            {chatInstances.map((_, index) => (
-              <li key={index}>Chat {index + 1}</li>
-            ))}
-          </ul>
-					</div>
-					<div className='bottom-0 '>
-						<div>
-							{auth.currentUser?.displayName}
-						</div>
-					</div>
-				</div>
-				<div className='w-full py-4 px-6 bg-zinc-700 justify-center flex '>
-					{chatInstances.length > 0 && chatInstances[chatInstances.length - 1]}
-				</div>
-			</div>
-		</>
-	)
+  const createNewChat = () => {
+    const newChatId = chatInstances.length + 1;
+    const newChatInstance = (
+      <div key={newChatId} onClick={() => handleChatClick(newChatId)} className={activeChatId === newChatId ? 'underline underline-offset-4' : ''}>
+        Chat {newChatId}
+      </div>
+    );
+
+    const newChatInstances = [...chatInstances, newChatInstance];
+    setChatInstances(newChatInstances);
+
+    if (!activeChatId) {
+      setActiveChatId(newChatId);
+    }
+  };
+
+  const handleChatClick = (chatId) => {
+    setActiveChatId(chatId);
+  };
+
+  return (
+    <>
+      <div className="text-white bg-black flex flex-row w-full h-screen ">
+        <div className='w-80  py-4 px-6 h-screen md:flex hidden flex-col justify-between'>
+          <div>
+            <div className='flex flex-row justify-between items-end '>
+              <div className='text-3xl font-semibold'>
+                <Link to='/'>
+                  Name
+                </Link>
+              </div>
+              <div onClick={createNewChat} className=''>
+                New +
+              </div>
+            </div>
+            <div className='mt-10'>
+              <ul>
+	      {chatInstances.map((chatInstance, index) => (
+                  <li
+                    key={index}
+                    onClick={() => handleChatClick(index + 1)}
+                    className={activeChatId === index + 1 ? 'underline underline-offset-4' : ''}
+                  >
+                    Chat {index + 1}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <div className='bottom-0 '>
+            <div>
+              {auth?.currentUser?.displayName}
+            </div>
+          </div>
+        </div>
+        <div className='w-full py-4 px-6 bg-zinc-700 justify-center flex '>
+          {activeChatId && <Layout id={activeChatId} />}
+        </div>
+      </div>
+    </>
+  )
 }
 
-export default Chat
+export default Chat;
