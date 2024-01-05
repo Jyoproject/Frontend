@@ -17,35 +17,45 @@ export const initialMessages = [
 const InputMessage = ({ sendMessage }) => {
 	const [voiceInput, setVoiceInput] = useState('');
 	const [recognition, setRecognition] = useState(null);
+	const [listening, setListening] = useState(false);
       
-	const initializeSpeechRecognition = () => {
-	  const recognition = new window.webkitSpeechRecognition();
-	  recognition.lang = 'en-US';
+	useEffect(() => {
+	  if (!recognition) {
+	    const newRecognition = new window.webkitSpeechRecognition();
+	    newRecognition.lang = 'en-US';
       
-	  recognition.onresult = (event) => {
-	    const transcript = event.results[0][0].transcript;
-	    setVoiceInput(transcript);
-	  };
+	    newRecognition.onresult = (event) => {
+	      const transcript = event.results[0][0].transcript;
+	      setVoiceInput(transcript);
+	    };
       
-	  recognition.onend = () => {
-	    recognition.stop();
-	  };
+	    newRecognition.onend = () => {
+	      setListening(false);
+	    };
       
-	  setRecognition(recognition);
-	  recognition.start();
+	    setRecognition(newRecognition);
+	  }
+	}, [recognition]);
+      
+	const startRecognition = () => {
+	  if (recognition && !listening) {
+	    recognition.start();
+	    setListening(true);
+	  }
 	};
       
-	const stopSpeechRecognition = () => {
-	  if (recognition) {
+	const stopRecognition = () => {
+	  if (recognition && listening) {
 	    recognition.stop();
+	    setListening(false);
 	  }
 	};
       
 	const handleVoiceRecognition = () => {
-	  if (!recognition) {
-	    initializeSpeechRecognition();
+	  if (listening) {
+	    stopRecognition();
 	  } else {
-	    stopSpeechRecognition();
+	    startRecognition();
 	  }
 	};
       
@@ -78,7 +88,7 @@ const InputMessage = ({ sendMessage }) => {
 	      className="ml-4 border-2 cursor-pointer rounded-lg w-32 flex flex-row items-center justify-center pt-1.5 pb-1.5"
 	      onClick={handleVoiceRecognition}
 	    >
-	      Voice
+	      {listening ? 'Stop Voice' : 'Voice'}
 	    </button>
 	  </div>
 	);
