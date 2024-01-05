@@ -4,6 +4,7 @@ import Layout from './Layout';
 import {  signOut } from "firebase/auth";
 import { db, auth } from "../../firebase";
 import { collection, getDocs, where, addDoc  } from "firebase/firestore";
+import Dropdown from '../Modules/Menu';
 
 const Chat = () => {
 	const currentUser = auth.currentUser;
@@ -96,6 +97,7 @@ const Chat = () => {
             </div>
           </div>
           <div className='bottom-0 '>
+            <Dropdown />
             <div className='' onClick={handleSignOut}>
 	    {currentUser?.displayName}
             </div>
