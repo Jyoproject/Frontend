@@ -98,9 +98,9 @@ const Signin = () => {
 	
 
 	return (
-		<div className="flex flex-row  w-full bg-[#111111] text-white">
+		<div className="flex flex-row  w-full bg-[#111111] dark:bg-white text-white dark:text-black">
 			<div className="bg-signin w-full bg-no-repeat lg:bg-[length:896px_1040px]  bg-blend-multiply bg-black/40 ">
-				<div className="font-bold text-[69px] flex flex-col h-screen  justify-center leading-tight pl-[5vh] ">
+				<div className="font-bold text-white text-[69px] flex flex-col h-screen  justify-center leading-tight pl-[5vh] ">
 					<span>
 						Copilot,
 					</span>
@@ -132,13 +132,13 @@ const Signin = () => {
 						/>
 					</div> */}
 					<div className="flex flex-col items-center gap-2 ">
-						<div onClick={googleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+						<div onClick={googleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Google
 						</div>
-						<div onClick={facebookSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+						<div onClick={facebookSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Facebook
 						</div>
-						<div onClick={appleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+						<div onClick={appleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Apple
 						</div>
 						{/* onClick={() => handleSignIn()} */}

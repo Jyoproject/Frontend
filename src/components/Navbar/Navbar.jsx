@@ -1,14 +1,38 @@
 
-import { useContext } from 'react';
+import { useContext, useState, useEffect } from 'react';
 // import { useSession } from 'next-auth/react';
 // import { useEffect, useState } from "react"
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ColorMode, ThemeContext } from '../../modules/ThemeProvider';
-import Dropdown_M from '../Modules/Dropdown_M'
+import Dropdown_M from '../Modules/Dropdown_M';
+import { onAuthStateChanged } from 'firebase/auth';
+import { signOut } from "firebase/auth";
+import { auth } from "../../firebase";
 
 
 
 const Navbar = () => {
+	const navigate = useNavigate();
+
+	const [user, setUser] = useState(null);
+
+	useEffect(() => {
+		const unsubscribe = onAuthStateChanged(auth, (user) => {
+		setUser(user);
+		});
+
+		return () => unsubscribe(); // Cleanup the listener on unmount
+	}, []);
+
+	const handleSignOut = () => {
+		signOut(auth).then(() => {
+			navigate('/'); 
+		// Sign-out successful.
+		}).catch((error) => {
+			console.log(error)
+		});
+	}
+
 	const { colorMode, setColorMode } = useContext(ThemeContext);
 	console.log(colorMode)
 	// const {data: session} = useSession()
@@ -41,10 +65,15 @@ const Navbar = () => {
 				
 				<div className="md:flex hidden flex-row gap-10">		
 					<div className="cursor-pointer"  >
-						<Link to="/chat">
-							Chat	
-
-						</Link>
+						{user ? 
+							<Link to="/chat">
+								Chat	
+							</Link>
+							:
+							<Link to='/signin'>
+								Chat
+							</Link>
+						}
 					</div>
 					<div className="cursor-pointer" > 
 						Contact Us
@@ -59,9 +88,15 @@ const Navbar = () => {
 				<div className="flex flex-row items-center justify-center gap-4">
 						<div className='flex flex-row items-center gap-10'>
 							<div  className='md:flex hidden flex-row items-center justify-center gap-2 border-2 border-black dark:border-white cursor-pointer rounded-lg py-2 px-4  '>
-								<Link to='/signin'>
-									Get started
-								</Link>
+								{user ?
+									<div onClick={(handleSignOut)}>
+										Log Out
+									</div>
+									:
+									<Link to='/signin'>
+										Get started
+									</Link>
+								}
 							</div>
 							
 							<button className='font-medium md:block hidden' onClick={() => {setColorMode(colorMode === ColorMode.dark ? ColorMode.light : ColorMode.dark)}}>

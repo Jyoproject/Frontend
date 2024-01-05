@@ -2,7 +2,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
-import {getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, setPersistence, browserSessionPersistence} from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -29,5 +29,12 @@ export const googleProvider = new GoogleAuthProvider();
 export const facebookProvider = new FacebookAuthProvider();
 export const appleProvider = new OAuthProvider('apple.com');
 
+setPersistence(auth, browserSessionPersistence)
+  .then(() => {
+    console.log('Auth persistence enabled');
+  })
+  .catch((error) => {
+    console.error('Error setting auth persistence:', error);
+  });
 
 const analytics = getAnalytics(app);
