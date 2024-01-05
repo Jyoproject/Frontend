@@ -1,33 +1,48 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from './Layout';
-
+import {  signOut } from "firebase/auth";
 import { db, auth } from "../../firebase";
+import { useNavigate } from 'react-router-dom';
 
 const Chat = () => {
-  const [chatInstances, setChatInstances] = useState([]);
-  const [activeChatId, setActiveChatId] = useState(null);
+	const currentUser = auth.currentUser;
+	const navigate = useNavigate();
+  	const [chatInstances, setChatInstances] = useState([]);
+  	const [activeChatId, setActiveChatId] = useState(null);
   
-
-  const createNewChat = () => {
-    const newChatId = chatInstances.length + 1;
-    const newChatInstance = (
-      <div key={newChatId} onClick={() => handleChatClick(newChatId)} className={activeChatId === newChatId ? 'underline underline-offset-4' : ''}>
-        Chat {newChatId}
-      </div>
-    );
-
-    const newChatInstances = [...chatInstances, newChatInstance];
-    setChatInstances(newChatInstances);
-
-    if (!activeChatId) {
-      setActiveChatId(newChatId);
-    }
-  };
-
-  const handleChatClick = (chatId) => {
-    setActiveChatId(chatId);
-  };
+	const handleSignOut = () => {
+		signOut(auth).then(() => {
+			navigate('/'); 
+			// Sign-out successful.
+		      }).catch((error) => {
+			console.log(error)
+		      });
+	}
+	const createNewChat = () => {
+		const newChatId = chatInstances.length + 1;
+	    
+		const newChatInstance = {
+		  id: newChatId,
+		  userId: currentUser?.uid,
+		  // You can add more properties as needed for each chat instance
+		  // For instance, you might have messages, participants, etc.
+		  // messages: [],
+		  // participants: [],
+		};
+	    
+		const newChatInstances = [...chatInstances, newChatInstance];
+		setChatInstances(newChatInstances);
+	    
+		if (!activeChatId) {
+		  setActiveChatId(newChatId);
+		}
+	      };
+	    
+	      const handleChatClick = (chatId) => {
+		setActiveChatId(chatId);
+	      };
+  
 
   return (
     <>
@@ -46,21 +61,21 @@ const Chat = () => {
             </div>
             <div className='mt-10'>
               <ul>
-	      {chatInstances.map((chatInstance, index) => (
+	      {chatInstances.map((chatInstance) => (
                   <li
-                    key={index}
-                    onClick={() => handleChatClick(index + 1)}
-                    className={activeChatId === index + 1 ? 'underline underline-offset-4' : ''}
+                    key={chatInstance.id}
+                    onClick={() => handleChatClick(chatInstance.id)}
+                    className={activeChatId === chatInstance.id ? 'underline underline-offset-4' : ''}
                   >
-                    Chat {index + 1}
+                    {chatInstance.userId === currentUser.uid ? `Your Chat ${chatInstance.id}` : `Chat ${chatInstance.id}`}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
           <div className='bottom-0 '>
-            <div>
-              {auth?.currentUser?.displayName}
+            <div className='' onClick={handleSignOut}>
+	    {currentUser?.displayName}
             </div>
           </div>
         </div>
