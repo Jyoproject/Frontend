@@ -7,6 +7,7 @@ import { db, auth } from "../../firebase";
 const Chat = () => {
   const [chatInstances, setChatInstances] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
+  
 
   const createNewChat = () => {
     const newChatId = chatInstances.length + 1;

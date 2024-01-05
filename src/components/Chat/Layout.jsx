@@ -14,39 +14,75 @@ export const initialMessages = [
 	  message: '',
 	},
 ]
-
-const InputMessage = ({ input, setInput, sendMessage, createChat }) => (
-  <div className="mt-6 flex  clear-both">
-    <input
-      type="text"
-      aria-label="chat input"
-      required
-      className=" flex-auto appearance-none rounded-md bg-transparent border  px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-black focus:outline-none"
-      value={input}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') {
-
-          sendMessage(input)
-          setInput('')
-        }
-      }}
-      onChange={(e) => {
-        setInput(e.target.value)
-      }}
-    />
-    <button
-      type="submit"
-      className="ml-4 border-2 cursor-pointer rounded-lg w-32 flex flex-row items-center justify-center pt-1.5 pb-1.5" 
-      onClick={() => {
-	createChat()
-        sendMessage(input)
-        setInput('')
-      }}
-    >
-      Ask
-    </button>
-  </div>
-)
+const InputMessage = ({ sendMessage }) => {
+	const [voiceInput, setVoiceInput] = useState('');
+	const [recognition, setRecognition] = useState(null);
+      
+	const initializeSpeechRecognition = () => {
+	  const recognition = new window.webkitSpeechRecognition();
+	  recognition.lang = 'en-US';
+      
+	  recognition.onresult = (event) => {
+	    const transcript = event.results[0][0].transcript;
+	    setVoiceInput(transcript);
+	  };
+      
+	  recognition.onend = () => {
+	    recognition.stop();
+	  };
+      
+	  setRecognition(recognition);
+	  recognition.start();
+	};
+      
+	const stopSpeechRecognition = () => {
+	  if (recognition) {
+	    recognition.stop();
+	  }
+	};
+      
+	const handleVoiceRecognition = () => {
+	  if (!recognition) {
+	    initializeSpeechRecognition();
+	  } else {
+	    stopSpeechRecognition();
+	  }
+	};
+      
+	const handleSendMessage = () => {
+	  if (voiceInput.trim() !== '') {
+	    sendMessage(voiceInput);
+	    setVoiceInput('');
+	  }
+	};
+      
+	return (
+	  <div className="mt-6 flex  clear-both">
+	    <input
+	      type="text"
+	      aria-label="chat input"
+	      required
+	      className=" flex-auto appearance-none rounded-md bg-transparent border  px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-black focus:outline-none"
+	      value={voiceInput}
+	      onChange={(e) => setVoiceInput(e.target.value)}
+	    />
+	    <button
+	      type="submit"
+	      className="ml-4 border-2 cursor-pointer rounded-lg w-32 flex flex-row items-center justify-center pt-1.5 pb-1.5"
+	      onClick={handleSendMessage}
+	    >
+	      Ask
+	    </button>
+	    <button
+	      type="button"
+	      className="ml-4 border-2 cursor-pointer rounded-lg w-32 flex flex-row items-center justify-center pt-1.5 pb-1.5"
+	      onClick={handleVoiceRecognition}
+	    >
+	      Voice
+	    </button>
+	  </div>
+	);
+      };
 
 const Layout = ({id}) => {
 	const [messages, setMessages] = useState(initialMessages)
@@ -124,10 +160,9 @@ const Layout = ({id}) => {
 					</span>
 				)}
 				<InputMessage
-					input={input}
-					setInput={setInput}
+					
+					
 					sendMessage={sendMessage}
-					createChat={createChat}
 				/>
 			</div>	
 		</div>
