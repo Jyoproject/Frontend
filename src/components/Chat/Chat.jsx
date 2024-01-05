@@ -23,19 +23,11 @@ const Chat = () => {
     try {
       const newChatRef = await addDoc(collection(db, 'chats'), {
         userId: currentUser?.uid,
-        messages:[]
-        // Add more properties as needed
-        // For instance, messages: [],
-        // participants: [],
       });
 
       const newChatInstance = {
         id: newChatRef.id,
         userId: currentUser?.uid,
-        messages: []
-        // Add more properties as needed
-        // For instance, messages: [],
-        // participants: [],
       };
 
       const newChatInstances = [...chatInstances, newChatInstance];
@@ -48,6 +40,27 @@ const Chat = () => {
       console.error('Error creating new chat:', error);
     }
   };
+  useEffect(() => {
+    const fetchChatInstances = async () => {
+      try {
+        const querySnapshot = await getDocs(
+          collection(db, 'chats'),
+          where('userId', '==', currentUser?.uid)
+        );
+        const fetchedChatInstances = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setChatInstances(fetchedChatInstances);
+      } catch (error) {
+        console.error('Error fetching chat instances:', error);
+      }
+    };
+
+    if (currentUser) {
+      fetchChatInstances();
+    }
+  }, [currentUser]);
 	    
 	const handleChatClick = (chatId) => {
 		setActiveChatId(chatId);
@@ -74,7 +87,7 @@ const Chat = () => {
                   <li
                     key={chatInstance.id}
                     onClick={() => handleChatClick(chatInstance.id)}
-                    className={activeChatId === chatInstance.id ? 'underline underline-offset-4' : ''}
+                    className={activeChatId === chatInstance.id ? 'underline underline-offset-4 mt-3' : 'mt-3'}
                   >
                     {chatInstance.userId === currentUser.uid ? `Query ${chatInstance.id}` : `Chat ${chatInstance.id}`}
                   </li>
