@@ -49,13 +49,13 @@ export function ChatLine({ who = "bot", message }) {
             <div className="flex-1 gap-4">
               <p className="font-large text-xxl text-gray-900">
                 <a href="#" className="hover:underline">
-                  {who == "bot" ? "bot" : "You"}
+                  {who === "bot" ? "bot" : "user"}
                 </a>
               </p>
               <p
                 className={clsx(
                   "text ",
-                  who == "bot" ? "font-semibold text-black " : "text-gray-500"
+                  who === "bot" ? "font-semibold text-black " : "text-gray-500"
                 )}
               >
                 {formatteMessage}

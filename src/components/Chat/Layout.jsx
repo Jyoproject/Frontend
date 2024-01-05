@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {  ChatLine, LoadingChatLine } from './ChatLine'
 import { useCookies } from 'react-cookie'
-import { addDoc, collection} from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from "firebase/firestore";
 import {db, auth} from "../../firebase";
 
 const COOKIE_NAME = 'copilot-for-lawyers'
@@ -96,7 +96,6 @@ const InputMessage = ({ sendMessage }) => {
 
 const Layout = ({id}) => {
 	const [messages, setMessages] = useState(initialMessages)
-	const [input, setInput] = useState('')
 	const [loading, setLoading] = useState(false)
 	const [cookie, setCookie] = useCookies([COOKIE_NAME])
 
@@ -108,51 +107,103 @@ const Layout = ({id}) => {
 		}
 	}, [cookie, setCookie])
 
-	const chatsCollectionRef = collection(db, 'chats')
+	const chatsCollectionRef = collection(db, 'chats');
+
+	
 
 
-  	// send message to API /api/chat endpoint
-	const sendMessage = async (message) => {
-		setLoading(true)
+  	// send message to API endpoint
+	  const sendMessage = async (userMessage) => {
+		setLoading(true);
 		const newMessages = [
 			...messages,
-			{ message: message, who: 'user' },
+			{ message: userMessage, who: 'user' },
 		]
 		setMessages(newMessages)
-		const last10mesages = newMessages.slice(-10)
-
-		const response = await fetch('https://backend.advocateally.com/chat', {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-			},
-			body: JSON.stringify({
-				messages: last10mesages,
-				user: auth.currentUser.uid,
-			}),
-		})
-		const data = await response.json()
+	    
+		try {
+		  // Send user message to API and get bot response
+		  const response = await fetch('https://backend.advocateally.com/chat', {
+		    method: 'POST',
+		    headers: {
+		      'Content-Type': 'application/json',
+		    },
+		    body: JSON.stringify({ message: userMessage, user: auth.currentUser.uid }),
+		  });
+		  const data = await response.json()
 
 		// strip out white spaces from the bot message
-		const botNewMessage = data.message.trim()
-
-		setMessages([
+		const botResponse = data.message.trim()
+		  console.log(botResponse)
+		  setMessages([
 			...newMessages,
-			{ message: botNewMessage, who: 'bot' },
+			{ message: botResponse, who: 'bot' },
 		])
-		setLoading(false)
-	}
 
-	const createChat = async () => {
-		await addDoc(chatsCollectionRef, {
-			sendMessage,
-			messages,
-			author: {
-				name: auth.currentUser.displayName,
-				id: auth.currentUser.uid
-			}
-		})
-	}
+		  // Save user message and bot response to Firestore
+		  const chatMessagesRef = collection(db, `chats/chat-${id}/messages`); // Assuming 'id' is the chat instance ID
+	      
+		  await addDoc(chatMessagesRef, {
+			message: userMessage,
+			who: 'user',
+			timestamp: new Date(), // Use local timestamp for each message
+			authorId: auth.currentUser.uid,
+		      });
+		
+		      // Save bot response to Firestore as a separate document
+		      await addDoc(chatMessagesRef, {
+			message: botResponse,
+			who: 'bot',
+			timestamp: new Date(), // Use local timestamp for each message
+			// Assuming there's a common field (e.g., 'parentId') to associate user and bot messages
+			parentId: chatMessagesRef.id, // Use a common identifier to group messages
+		      });
+		} catch (error) {
+		  console.error('Error sending message:', error);
+		}
+	    
+		setLoading(false);
+	      };
+	    
+	      useEffect(() => {
+		const chatMessagesRef = collection(db, `chats/chat-${id}/messages`);
+	      
+		const unsubscribe = onSnapshot(
+		  query(chatMessagesRef, orderBy('timestamp')), // Order by timestamp or any relevant field
+		  (snapshot) => {
+		    const allMessages = [];
+	      
+		    snapshot.forEach((doc) => {
+		      const messageData = doc.data();
+		      allMessages.push(messageData);
+		    });
+	      
+		    // Filter messages for user and bot
+		    const userMessages = allMessages.filter((message) => message.who === 'user');
+		    const botMessages = allMessages.filter((message) => message.who === 'bot');
+	      
+		    console.log('User Messages:', userMessages);
+		    console.log('Bot Messages:', botMessages);
+	      
+		    // Handle the filtered messages as needed (e.g., update state variables)
+		    setMessages(allMessages); // Set all messages
+		    // setUserMessages(userMessages); // Optionally, set user messages
+		    // setBotMessages(botMessages); // Optionally, set bot messages
+		  }
+		);
+	      
+		return () => unsubscribe();
+	      }, [id]);
+	// const createChat = async () => {
+	// 	await addDoc(chatsCollectionRef, {
+	// 		sendMessage,
+	// 		messages,
+	// 		author: {
+	// 			name: auth.currentUser.displayName,
+	// 			id: auth.currentUser.uid
+	// 		}
+	// 	})
+	// }
 
 	return (
 		<div className="  overflow-auto flex flex-col justify-between w-[70%]  p-6">
