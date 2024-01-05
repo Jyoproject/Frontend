@@ -4,7 +4,7 @@ import React, {  useEffect, useState } from "react";
 import {signInWithPopup,FacebookAuthProvider, OAuthProvider} from "firebase/auth";
 import {auth, googleProvider, facebookProvider, appleProvider} from "../../firebase";
 import { useNavigate } from 'react-router-dom';
-
+import PhoneSignIn from "./PhoneSignIn";
 import { Link } from 'react-router-dom';
 
 
@@ -127,6 +127,12 @@ const SignIn_M = () => {
 						<div onClick={appleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Apple
 						</div>
+					</div>
+					<div>
+						OR
+					</div>
+					<div>
+						<PhoneSignIn />
 					</div>
 				</div>
 		</div>

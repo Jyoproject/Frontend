@@ -2,7 +2,7 @@
 import { Container } from '../Lib/Container'
 // import { Logo } from '../comp/Logo'
 import { NavLink } from '../Lib/NavLink'
-import { Link, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 
 const Footer = () => {
@@ -15,7 +15,7 @@ const Footer = () => {
 			{ signin || chat ? 
 				<></>
 				:
-				<footer className="bg-footer">
+				<footer className="bg-footer dark:bg-[#1c1c1c]">
 					<Container className={undefined}>
 						<div className="pt-16 flex flex-col items-center">
 							<div className="mx-auto h-10 w-auto flex items-center justify-center font-bold text-2xl text-white" >

@@ -1,25 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Layout from './Layout';
-import {  signOut } from "firebase/auth";
 import { db, auth } from "../../firebase";
 import { collection, getDocs, where, addDoc  } from "firebase/firestore";
 import Dropdown from '../Modules/Menu';
 
 const Chat = () => {
 	const currentUser = auth.currentUser;
-	const navigate = useNavigate();
   const [chatInstances, setChatInstances] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   
-	const handleSignOut = () => {
-		signOut(auth).then(() => {
-			navigate('/'); 
-			// Sign-out successful.
-		}).catch((error) => {
-		  console.log(error)
-	  });
-	}
 	const createNewChat = async () => {
     try {
       const newChatRef = await addDoc(collection(db, 'chats'), {
@@ -98,9 +88,6 @@ const Chat = () => {
           </div>
           <div className='bottom-0 '>
             <Dropdown />
-            <div className='' onClick={handleSignOut}>
-	    {currentUser?.displayName}
-            </div>
           </div>
         </div>
         <div className='w-full py-4 px-6 bg-zinc-700 justify-center flex '>

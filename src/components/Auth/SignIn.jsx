@@ -6,15 +6,11 @@ import {auth, googleProvider, facebookProvider, appleProvider} from "../../fireb
 import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
+import PhoneSignIn from "./PhoneSignIn";
+import EmailPasswordSignIn from "./EmailPasswordSignIn";
 
 const Signin = () => {
 	const navigate = useNavigate();
-
-
-
-	// const handleSignIn = () => {
-	// 	signIn('google', {callbackUrl: '/app/dashboard'})
-	// }
 	const [value,setValue] = useState('')
 	const googleSignin =()=>{
 		signInWithPopup(auth, googleProvider)
@@ -119,33 +115,30 @@ const Signin = () => {
 					<div className="font-bold text-4xl">
 						Good to see you again!
 					</div>
-					{/* <div className="flex flex-col gap-6">
-						<input 
-							type="email"
-							placeholder="Email"
-							className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
-						/>
-						<input 
-							type="password"
-							placeholder="Password"
-							className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
-						/>
-					</div> */}
-					<div className="flex flex-col items-center gap-2 ">
-						<div onClick={googleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
-							Sign In with Google
-						</div>
-						<div onClick={facebookSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
-							Sign In with Facebook
-						</div>
-						<div onClick={appleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
-							Sign In with Apple
-						</div>
-						{/* onClick={() => handleSignIn()} */}
-						{/* <div onClick={() => handleSignOut()} className="border-2 cursor-pointer rounded-lg w-48 flex flex-row items-center justify-center pt-2 pb-2">
-							Sign Up
-						</div> */}
+					<div>
+						<EmailPasswordSignIn />
 					</div>
+					<div className="flex flex-row items-center justify-center gap-10 mt-5">
+						<div className="flex flex-col items-center gap-2 ">
+							<div onClick={googleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+								Sign In with Google
+							</div>
+							<div onClick={facebookSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+								Sign In with Facebook
+							</div>
+							<div onClick={appleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+								Sign In with Apple
+							</div>
+						</div>
+						<div>
+							OR
+						</div>
+						<div>
+							<PhoneSignIn />
+						</div>
+
+					</div>
+					
 				</div>
 			</div>
 		</div>
