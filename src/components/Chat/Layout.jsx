@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import {  ChatLine, LoadingChatLine } from './ChatLine'
 import { useCookies } from 'react-cookie'
-import { collection, addDoc, serverTimestamp, query, orderBy, limit, onSnapshot } from "firebase/firestore";
+import { collection, addDoc, serverTimestamp, query, orderBy,  onSnapshot } from "firebase/firestore";
 import {db, auth} from "../../firebase";
 
 const COOKIE_NAME = 'copilot-for-lawyers'
@@ -107,11 +107,6 @@ const Layout = ({id}) => {
 		}
 	}, [cookie, setCookie])
 
-	const chatsCollectionRef = collection(db, 'chats');
-
-	
-
-
   	// send message to API endpoint
 	  const sendMessage = async (userMessage) => {
 		setLoading(true);
@@ -148,7 +143,7 @@ const Layout = ({id}) => {
 			who: 'user',
 			timestamp: new Date(), // Use local timestamp for each message
 			authorId: auth.currentUser.uid,
-		      });
+		});
 		
 		      // Save bot response to Firestore as a separate document
 		      await addDoc(chatMessagesRef, {

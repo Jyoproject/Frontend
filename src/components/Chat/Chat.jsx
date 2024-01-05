@@ -1,48 +1,57 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import {  signOut } from "firebase/auth";
 import { db, auth } from "../../firebase";
-import { useNavigate } from 'react-router-dom';
+import { collection, getDocs, where, addDoc  } from "firebase/firestore";
 
 const Chat = () => {
 	const currentUser = auth.currentUser;
 	const navigate = useNavigate();
-  	const [chatInstances, setChatInstances] = useState([]);
-  	const [activeChatId, setActiveChatId] = useState(null);
+  const [chatInstances, setChatInstances] = useState([]);
+  const [activeChatId, setActiveChatId] = useState(null);
   
 	const handleSignOut = () => {
 		signOut(auth).then(() => {
 			navigate('/'); 
 			// Sign-out successful.
-		      }).catch((error) => {
-			console.log(error)
-		      });
+		}).catch((error) => {
+		  console.log(error)
+	  });
 	}
-	const createNewChat = () => {
-		const newChatId = chatInstances.length + 1;
+	const createNewChat = async () => {
+    try {
+      const newChatRef = await addDoc(collection(db, 'chats'), {
+        userId: currentUser?.uid,
+        messages:[]
+        // Add more properties as needed
+        // For instance, messages: [],
+        // participants: [],
+      });
+
+      const newChatInstance = {
+        id: newChatRef.id,
+        userId: currentUser?.uid,
+        messages: []
+        // Add more properties as needed
+        // For instance, messages: [],
+        // participants: [],
+      };
+
+      const newChatInstances = [...chatInstances, newChatInstance];
+      setChatInstances(newChatInstances);
+
+      if (!activeChatId) {
+        setActiveChatId(newChatRef.id);
+      }
+    } catch (error) {
+      console.error('Error creating new chat:', error);
+    }
+  };
 	    
-		const newChatInstance = {
-		  id: newChatId,
-		  userId: currentUser?.uid,
-		  // You can add more properties as needed for each chat instance
-		  // For instance, you might have messages, participants, etc.
-		  // messages: [],
-		  // participants: [],
-		};
-	    
-		const newChatInstances = [...chatInstances, newChatInstance];
-		setChatInstances(newChatInstances);
-	    
-		if (!activeChatId) {
-		  setActiveChatId(newChatId);
-		}
-	      };
-	    
-	      const handleChatClick = (chatId) => {
+	const handleChatClick = (chatId) => {
 		setActiveChatId(chatId);
-	      };
-  
+  };
 
   return (
     <>
@@ -67,7 +76,7 @@ const Chat = () => {
                     onClick={() => handleChatClick(chatInstance.id)}
                     className={activeChatId === chatInstance.id ? 'underline underline-offset-4' : ''}
                   >
-                    {chatInstance.userId === currentUser.uid ? `Your Chat ${chatInstance.id}` : `Chat ${chatInstance.id}`}
+                    {chatInstance.userId === currentUser.uid ? `Query ${chatInstance.id}` : `Chat ${chatInstance.id}`}
                   </li>
                 ))}
               </ul>
