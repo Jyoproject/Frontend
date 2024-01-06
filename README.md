@@ -20,7 +20,7 @@ See [Firebase Authentication](https://firebase.google.com/docs/auth/web/start) d
 `firebase.auth()`
 
 ### Firebase Console
-![Alt text](/relative/path/to/img.jpg?raw=true "Optional Title")
+![Alt text](/public/images/console.png?raw=true "Firebase Console")
 
 ### Facebook Auth
 - On the Facebook for Developers site, get the App ID and an App Secret for your app (https://developers.facebook.com)
