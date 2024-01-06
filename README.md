@@ -4,11 +4,11 @@
 
 1. Firebase setup
 2. Authentication
-	a. Google Auth
-	b. Email/Password
-	c. SMS 
-	d. Facebook
-	e. Apple
+	- Google Auth
+	- Email/Password
+	- SMS 
+	- Facebook
+	- Apple
 
 
 ### Firebase Setup
