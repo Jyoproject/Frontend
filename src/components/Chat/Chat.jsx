@@ -9,8 +9,11 @@ const Chat = () => {
 	const currentUser = auth.currentUser;
   const [chatInstances, setChatInstances] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
+  const [counter, setCounter] = useState(0);
   
 	const createNewChat = async () => {
+    const newChatId = counter + 1; // Increment the counter
+    setCounter(newChatId);
     try {
       const newChatRef = await addDoc(collection(db, 'chats'), {
         userId: currentUser?.uid,
@@ -80,7 +83,7 @@ const Chat = () => {
                     onClick={() => handleChatClick(chatInstance.id)}
                     className={activeChatId === chatInstance.id ? 'underline underline-offset-4 mt-3' : 'mt-3'}
                   >
-                    {chatInstance.userId === currentUser.uid ? `Query ${chatInstance.id}` : `Chat ${chatInstance.id}`}
+                    {chatInstance.userId === currentUser.uid ? `Chats` : ``}
                   </li>
                 ))}
               </ul>

@@ -73,7 +73,7 @@ const InputMessage = ({ sendMessage }) => {
 	      aria-label="chat input"
 	      required
 	      className=" flex-auto appearance-none rounded-md bg-transparent border  px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-black focus:outline-none"
-	      value={voiceInput}
+	      value={listening ? ' listening...' : voiceInput}
 	      onChange={(e) => setVoiceInput(e.target.value)}
 	    />
 	    <button
