@@ -24,6 +24,6 @@ See [Firebase Authentication](https://firebase.google.com/docs/auth/web/start) d
 
 ### Facebook Auth
 - On the Facebook for Developers site, get the App ID and an App Secret for your app (https://developers.facebook.com)
-- 
+- ![Alt text](/public/images/facebook.png?raw=true "Facebook Auth")
 
 
