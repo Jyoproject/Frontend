@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { Link } from 'react-router-dom';
 import PhoneSignIn from "./PhoneSignIn";
-import EmailPasswordSignIn from "./EmailPasswordSignIn";
+import EmailPasswordSignUp from "./EmailPasswordSignUp";
 
 const Signin = () => {
 	const navigate = useNavigate();
@@ -114,12 +114,12 @@ const Signin = () => {
 				<div className="flex flex-col justify-center gap-20 items-center h-screen">
 					<div className="flex flex-col justify-center items-center gap-8">
 						<div className="font-bold text-4xl">
-							Good to see you again!
+							Welcome!
 						</div>
 						<div>
-							<EmailPasswordSignIn />
+							<EmailPasswordSignUp />
 						</div>
-					</div>	
+					</div>		
 					<div className="flex flex-row items-center justify-center gap-10 mt-5">
 						<div className="flex flex-col items-center gap-2 ">
 							<div onClick={googleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
@@ -138,17 +138,15 @@ const Signin = () => {
 						<div>
 							<PhoneSignIn />
 						</div>
-
-					</div>
+					</div>	
 					<div className="flex flex-col items-center gap-3">
-						Create an account ?
+						Already have an account ?
 						<button>
-							<Link to="/signup" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
-								SignUp
+							<Link to="/signin" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
+								SignIn
 							</Link>
 						</button>
 					</div>
-					
 				</div>
 			</div>
 		</div>

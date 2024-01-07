@@ -26,4 +26,8 @@ See [Firebase Authentication](https://firebase.google.com/docs/auth/web/start) d
 - On the Facebook for Developers site, get the App ID and an App Secret for your app (https://developers.facebook.com)
 - ![Alt text](/public/images/facebook.png?raw=true "Facebook Auth")
 
+### Apple Auth
+- Sign In with Apple can only be configured by members of the [Apple Developer Program](https://developer.apple.com/programs/).
+-
+
 

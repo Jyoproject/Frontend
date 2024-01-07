@@ -8,11 +8,12 @@ import { useLocation } from 'react-router-dom';
 const Footer = () => {
 	const location = useLocation()
 	const signin = location.pathname === '/signin'
+	const signup = location.pathname === '/signup'
 
 	const chat = location.pathname === '/chat'
 	return (
 		<>
-			{ signin || chat ? 
+			{ signin || chat || signup ? 
 				<></>
 				:
 				<footer className="bg-footer dark:bg-[#1c1c1c]">

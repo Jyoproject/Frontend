@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import {  AuthErrorCodes, getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { AuthErrorCodes, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
 
-const EmailPasswordSignIn = () => {
+const EmailPasswordSignUp = () => {
   const [input, setInput] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
 
@@ -16,19 +16,18 @@ const EmailPasswordSignIn = () => {
     let email = input.email.toLowerCase().trim();
     let password = input.password;
 
-    // sign in user
-    signInWithEmailAndPassword(auth, email, password)
+    // creating a new user
+    createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
-        // Signed in
+        // Signed up
         console.log(userCredential.user);
         // ...
       })
       .catch((err) => {
-        if (
-        err.code === AuthErrorCodes.INVALID_PASSWORD ||
-        err.code === AuthErrorCodes.USER_DELETED
-      ) {
-        setError("The email address or password is incorrect");
+        if (err.code === AuthErrorCodes.WEAK_PASSWORD) {
+        setError("The password is too weak.");
+      } else if (err.code === AuthErrorCodes.EMAIL_EXISTS) {
+        setError("The email address is already in use.");
       } else {
         console.log(err.code);
         alert(err.code);
@@ -36,7 +35,7 @@ const EmailPasswordSignIn = () => {
       });
   };
 
-  const handleChange = (e) => {
+   const handleChange = (e) => {
     setInput((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
@@ -44,7 +43,7 @@ const EmailPasswordSignIn = () => {
   };
 
   return (
-    <div className="">
+    <div className="form-body">
       <form autoComplete="off" className='flex flex-col justify-center items-center gap-5' onSubmit={handleSubmit}>
         <div className="">
           <input
@@ -72,13 +71,12 @@ const EmailPasswordSignIn = () => {
         </div>
         <div className="btn">
           {error ? <p className="login-error">{error}</p> : null}
-          <button title="Login" aria-label="Login" type="submit" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-3 px-4 w-40 bg-white text-black dark:bg-black dark:text-white'>
-            Login
+          <button title="Sign up"  className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-3 px-4 w-40 bg-white text-black dark:bg-black dark:text-white' aria-label="Signup" type="submit">
+            Create account
           </button>
         </div>
       </form>
     </div>
   );
 }
-
-export default EmailPasswordSignIn;
+export default EmailPasswordSignUp;

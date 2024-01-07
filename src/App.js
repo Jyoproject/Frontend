@@ -3,6 +3,7 @@ import { Route, Routes, Navigate,  } from 'react-router-dom';
 import Landing from './components/Landing/Landing';
 import Navbar from './components/Navbar/Navbar';
 import Auth from './components/Auth/Auth';
+import SignUp from './components/Auth/SignUp';
 import Chat from './components/Chat/Chat';
 import Footer from './components/Footer/Footer';
 import { useAuth } from './AuthProvider';
@@ -22,6 +23,7 @@ function App() {
         <Routes>        
           <Route path="/"  element={<Landing />} />
           <Route path='/signin' element={<Auth />}/>
+          <Route path='/signup' element={<SignUp />}/>
             <Route exact path='/chat' element={
               <AuthenticatedRoute>
                 <Chat />

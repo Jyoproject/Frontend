@@ -52,13 +52,14 @@ const Navbar = () => {
 	// }) 
 	const location = useLocation()
 	const signin = location.pathname === '/signin'
+	const signup = location.pathname === '/signup'
 
 	const chat = location.pathname === '/chat'
 
 	return (
 		<>
 
-			{signin || chat ? 
+			{signin || chat || signup ? 
 				<></>
 			:
 			<div className="flex  text-black dark:text-white flex-row  w-full md:py-10 md:justify-around  z-20 md:items-center pl-5 md:pl-0">
@@ -93,7 +94,7 @@ const Navbar = () => {
 										Log Out
 									</div>
 									:
-									<Link to='/signin'>
+									<Link to='/signup'>
 										Get started
 									</Link>
 								}
