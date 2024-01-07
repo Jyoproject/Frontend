@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {  AuthErrorCodes, getAuth, signInWithEmailAndPassword } from "firebase/auth";
 
 const EmailPasswordSignIn = () => {
+	const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
 
@@ -21,6 +22,7 @@ const EmailPasswordSignIn = () => {
       .then((userCredential) => {
         // Signed in
         console.log(userCredential.user);
+	navigate('/chat')
         // ...
       })
       .catch((err) => {

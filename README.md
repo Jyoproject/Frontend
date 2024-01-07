@@ -4,8 +4,6 @@
 
 1. Firebase setup
 2. Authentication
-	- Google Auth
-	- Email/Password
 	- SMS 
 	- Facebook
 	- Apple
