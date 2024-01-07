@@ -28,6 +28,6 @@ See [Firebase Authentication](https://firebase.google.com/docs/auth/web/start) d
 
 ### Apple Auth
 - Sign In with Apple can only be configured by members of the [Apple Developer Program](https://developer.apple.com/programs/).
--
+- ![Alt text](/public/images/apple.png?raw=true "Apple Auth")
 
 
