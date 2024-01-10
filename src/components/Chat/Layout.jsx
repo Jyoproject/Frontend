@@ -14,7 +14,7 @@ export const initialMessages = [
 	  message: '',
 	},
 ]
-const InputMessage = ({ sendMessage }) => {
+const InputMessage = ({ sendMessage, onSubmit }) => {
 	const [voiceInput, setVoiceInput] = useState('');
 	const [recognition, setRecognition] = useState(null);
 	const [listening, setListening] = useState(false);
@@ -216,6 +216,7 @@ const Layout = ({id}) => {
 					</span>
 				)}
 				<InputMessage
+				
 					
 					
 					sendMessage={sendMessage}

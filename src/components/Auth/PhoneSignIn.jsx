@@ -1,67 +1,92 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import firebase from '../../firebase';
 import { useNavigate } from 'react-router-dom';
-import { getAuth, signInWithPhoneNumber } from 'firebase/auth';
 
 const PhoneSignIn = () => {
-	const [phoneNumber, setPhoneNumber] = useState('');
-	const [verificationCode, setVerificationCode] = useState('');
-	const [confirmationResult, setConfirmationResult] = useState(null);
-	const navigate = useNavigate();
+  const navigate = useNavigate();
+  const [mobile, setMobile] = useState('');
+  const [otp, setOtp] = useState('');
+  const recaptchaVerifierRef = useRef(null);
 
-	const handlePhoneNumberSubmit = async (event) => {
-		event.preventDefault();
-		const auth = getAuth();
-		try {
-			const confirmation = await signInWithPhoneNumber(auth, phoneNumber);
-			setConfirmationResult(confirmation);
-		} catch (error) {
-			console.error('Error sending SMS verification:', error);
-		}
-	};
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    name === 'mobile' ? setMobile(value) : setOtp(value);
+  };
 
-	const handleVerificationCodeSubmit = async (event) => {
-		event.preventDefault();
-		try {
-			await confirmationResult.confirm(verificationCode);
-			navigate('/chat'); // Redirect to your desired page after successful authentication
-		} catch (error) {
-			console.error('Error confirming verification code:', error);
-		}
-	};
+  const configureCaptcha = () => {
+    recaptchaVerifierRef.current = new firebase.auth.RecaptchaVerifier('sign-in-button', {
+      'size': 'invisible',
+      'callback': (response) => {
+        onSignInSubmit();
+        console.log('reCAPTCHA verified');
+      },
+    });
+  };
 
-  	return (
-		<div className='flex flex-col  gap-8'>
-			<div className='text-xl font-semibold'>
-				Phone Number Sign-In
-			</div>
-			{!confirmationResult ? (
-				<form onSubmit={handlePhoneNumberSubmit} className='flex flex-col justify-center items-center gap-2'>
-					<input
-						type="text"
-						placeholder="Enter your phone number"
-						value={phoneNumber}
-						onChange={(e) => setPhoneNumber(e.target.value)}
-						className='flex-auto appearance-none rounded-md bg-transparent border  px-3 py-[calc(theme(spacing.2)-1px)] placeholder:text-black focus:outline-none'
-					/>
-					<button type="submit" className=' w-full border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-3 px-4 bg-white text-black dark:bg-black dark:text-white'>
-						Send verification code
-					</button>
-				</form>
-			) : (
-				<form onSubmit={handleVerificationCodeSubmit}>
-					<input
-						type="text"
-						placeholder="Enter verification code"
-						value={verificationCode}
-						onChange={(e) => setVerificationCode(e.target.value)}
-					/>
-					<button type="submit" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-3 px-4 bg-white text-black dark:bg-black dark:text-white'>
-						Verify code
-					</button>
-				</form>
-			)}
-		</div>
-  	);
+  const onSignInSubmit = (e) => {
+    e.preventDefault();
+    configureCaptcha();
+    const phoneNumber = '+' + mobile;
+    console.log(phoneNumber);
+    const appVerifier = recaptchaVerifierRef.current;
+    firebase.auth().signInWithPhoneNumber(phoneNumber, appVerifier)
+      .then((confirmationResult) => {
+        window.confirmationResult = confirmationResult;
+        console.log('OTP Sent....!!');
+        alert('OTP Sent! Please check your mobile phone!');
+        navigate('/chat')
+      })
+      .catch((error) => {
+        console.log('SMS NOT SENT ERROR....!!');
+        alert('Error!!! OTP Not Sent! Please add country code as well!');
+      });
+  };
+
+  const onOTPSubmit = (e) => {
+    e.preventDefault();
+    const code = otp;
+    window.confirmationResult.confirm(code)
+      .then((result) => {
+        const user = result.user;
+        console.log(JSON.stringify(user));
+        alert('User Verified Successfully!!');
+      })
+      .catch((error) => {
+        console.log(JSON.stringify(error));
+      });
+  };
+
+  return (
+    <div>
+      <h2>Login Form</h2>
+      <form onSubmit={onSignInSubmit}>
+        <div id='sign-in-button'></div>
+        <input
+          type='number'
+          name='mobile'
+          placeholder='Mobile number'
+          required
+          value={mobile}
+          onChange={handleChange}
+          className="text-black"
+        />
+        <button type='submit'>Submit</button>
+      </form>
+      <h2>Enter Form</h2>
+      <form onSubmit={onOTPSubmit}>
+        <input
+          type='number'
+          name='otp'
+          placeholder='OTP number'
+          required
+          value={otp}
+          onChange={handleChange}
+          className='text-black'
+        />
+        <button type='submit'>Submit</button>
+      </form>
+    </div>
+  );
 };
 
 export default PhoneSignIn;

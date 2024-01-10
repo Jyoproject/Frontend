@@ -46,6 +46,13 @@ const Chat = () => {
           ...doc.data(),
         }));
         setChatInstances(fetchedChatInstances);
+        // If there are no chat instances, create a new one
+        if (fetchedChatInstances.length === 0) {
+          createNewChat();
+        } else {
+          // Set the active chat to the first chat instance
+          setActiveChatId(fetchedChatInstances[0].id);
+        }
       } catch (error) {
         console.error('Error fetching chat instances:', error);
       }
@@ -77,13 +84,13 @@ const Chat = () => {
             </div>
             <div className='mt-10'>
               <ul>
-	      {chatInstances.map((chatInstance) => (
+	              {chatInstances.map((chatInstance) => (
                   <li
                     key={chatInstance.id}
                     onClick={() => handleChatClick(chatInstance.id)}
                     className={activeChatId === chatInstance.id ? 'underline underline-offset-4 mt-3' : 'mt-3'}
                   >
-                    {chatInstance.userId === currentUser.uid ? `Chats` : ``}
+                    {chatInstance.userId === currentUser.uid ? `Chats` : `Chats`}
                   </li>
                 ))}
               </ul>
@@ -94,7 +101,7 @@ const Chat = () => {
           </div>
         </div>
         <div className='w-full py-4 px-6 bg-zinc-700 justify-center flex '>
-          {activeChatId && <Layout id={activeChatId} />}
+        { activeChatId && <Layout id={activeChatId}  /> }
         </div>
       </div>
     </>

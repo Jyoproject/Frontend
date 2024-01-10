@@ -21,7 +21,7 @@ const Dropdown = () => {
 				<DropdownMenu.Trigger className=" cursor-pointer  flex flex-row  gap-2  pt-1.5 pb-1.5 focus:outline-none">
 					{auth && 
 						<div>
-							{currentUser?.displayName || currentUser.email}
+							{currentUser?.displayName || currentUser?.email || currentUser?.phoneNumber}
 						</div>
 					}
 				</DropdownMenu.Trigger>
