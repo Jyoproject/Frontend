@@ -42,7 +42,7 @@ const Signin = () => {
 				// This gives you a Facebook Access Token. You can use it to access the Facebook API.
 				const credential = FacebookAuthProvider.credentialFromResult(result);
 				const accessToken = credential.accessToken;
-
+				navigate('/chat');
 				// IdP data available using getAdditionalUserInfo(result)
 				// ...
 			})
@@ -70,7 +70,7 @@ const Signin = () => {
 				const credential = OAuthProvider.credentialFromResult(result);
 				const accessToken = credential.accessToken;
 				const idToken = credential.idToken;
-
+				navigate('/chat');
 				// IdP data available using getAdditionalUserInfo(result)
 				// ...
 			})

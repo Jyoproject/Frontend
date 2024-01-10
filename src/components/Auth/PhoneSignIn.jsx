@@ -59,6 +59,7 @@ const PhoneSignIn = () => {
   return (
     <div className='flex flex-col justify-center items-center gap-5'>
       <form onSubmit={onSignInSubmit} className='flex flex-row justify-center items-center gap-5'>
+      <div id='sign-in-button'></div>
         <input
           type='number'
           name='mobile'
