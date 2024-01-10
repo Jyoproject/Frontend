@@ -57,7 +57,7 @@ const EmailPasswordSignIn = () => {
             value={input.email}
             required
             autoComplete="true"
-	    className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
+	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
           />
         </div>
         <div className="">
@@ -69,7 +69,7 @@ const EmailPasswordSignIn = () => {
             type="password"
             required
             autoComplete="true"
-	    className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
+	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
           />
         </div>
         <div className="btn">

@@ -57,10 +57,8 @@ const PhoneSignIn = () => {
   };
 
   return (
-    <div>
-      <h2>Login Form</h2>
-      <form onSubmit={onSignInSubmit}>
-        <div id='sign-in-button'></div>
+    <div className='flex flex-col justify-center items-center gap-5'>
+      <form onSubmit={onSignInSubmit} className='flex flex-row justify-center items-center gap-5'>
         <input
           type='number'
           name='mobile'
@@ -68,12 +66,11 @@ const PhoneSignIn = () => {
           required
           value={mobile}
           onChange={handleChange}
-          className="text-black"
+          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-46 p-2 focus:outline-none"   
         />
-        <button type='submit'>Submit</button>
+        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>Submit</button>
       </form>
-      <h2>Enter Form</h2>
-      <form onSubmit={onOTPSubmit}>
+      <form onSubmit={onOTPSubmit} className='flex flex-row justify-center items-center gap-5'>
         <input
           type='number'
           name='otp'
@@ -81,9 +78,9 @@ const PhoneSignIn = () => {
           required
           value={otp}
           onChange={handleChange}
-          className='text-black'
+          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-46 p-2 focus:outline-none"   
         />
-        <button type='submit'>Submit</button>
+        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>Submit</button>
       </form>
     </div>
   );
