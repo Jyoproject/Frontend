@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link , useNavigate} from "react-router-dom";
-import { AuthErrorCodes, createUserWithEmailAndPassword, getAuth } from "firebase/auth";
+import { AuthErrorCodes, createUserWithEmailAndPassword, getAuth, setPersistence, browserSessionPersistence } from "firebase/auth";
 
 const EmailPasswordSignUp = () => {
 	const navigate = useNavigate();
@@ -43,6 +43,18 @@ const EmailPasswordSignUp = () => {
       [e.target.name]: e.target.value,
     }));
   };
+
+  setPersistence(auth, browserSessionPersistence)
+    .then(() => {
+      return  (
+        createUserWithEmailAndPassword(auth, input.email, input.password));
+        console.log('Auth persistence enabled');
+      
+      
+    })
+    .catch((error) => {
+      console.error('Error setting auth persistence:', error);
+    });
 
   return (
     <div className="form-body">

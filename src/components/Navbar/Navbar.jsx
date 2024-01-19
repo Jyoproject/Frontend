@@ -5,10 +5,9 @@ import { useContext, useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ColorMode, ThemeContext } from '../../modules/ThemeProvider';
 import Dropdown_M from '../Modules/Dropdown_M';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signInAnonymously } from 'firebase/auth';
 import { signOut } from "firebase/auth";
 import { auth } from "../../firebase";
-
 
 
 const Navbar = () => {
@@ -21,7 +20,10 @@ const Navbar = () => {
 		setUser(user);
 		});
 
-		return () => unsubscribe(); // Cleanup the listener on unmount
+		return () => {
+			unsubscribe();
+			setUser(null);
+		} // Cleanup the listener on unmount
 	}, []);
 
 	const handleSignOut = () => {
@@ -35,27 +37,20 @@ const Navbar = () => {
 
 	const { colorMode, setColorMode } = useContext(ThemeContext);
 	console.log(colorMode)
-	// const {data: session} = useSession()
-	// const [scroll, setScroll] = useState(false);
-
-	// const handleScroll = () => {
-	// 	if(window.scrollY >= 50){
-	// 		setScroll(true);
-	// 	}
-	// 	else{
-	// 		setScroll(false);
-	// 	}
-			
-	// }
-	// useEffect(() => {
-	// 	window.addEventListener('scroll', handleScroll);
-	// }) 
 	const location = useLocation()
 	const signin = location.pathname === '/signin'
 	const signup = location.pathname === '/signup'
 
 	const chat = location.pathname === '/chat'
 
+	const anonymousSignin = async () => {
+		try {
+		  await signInAnonymously(auth);
+			console.log('user signed in successfully')
+		} catch (error) {
+		  console.error('Error signing in anonymously:', error);
+		}
+	};
 	return (
 		<>
 
@@ -66,15 +61,22 @@ const Navbar = () => {
 				
 				<div className="md:flex hidden flex-row gap-10">		
 					<div className="cursor-pointer"  >
-						{user ? 
-							<Link to="/chat">
+					{ user && user.isAnonymous ? (
+									// If the user is signed in anonymously, only show "Get started" button
+									<Link onClick={anonymousSignin} to="/chat">
 								Chat	
 							</Link>
-							:
-							<Link to='/signin'>
-								Chat
-							</Link>
-						}
+									) 
+									: 
+									(
+										<Link to="/chat">
+											Chat
+										</Link>
+									)
+								}
+							
+							
+						
 					</div>
 					<div className="cursor-pointer" > 
 						Contact Us
@@ -89,14 +91,27 @@ const Navbar = () => {
 				<div className="flex flex-row items-center justify-center gap-4">
 						<div className='flex flex-row items-center gap-10'>
 							<div  className='md:flex hidden flex-row items-center justify-center gap-2 border-2 border-black dark:border-white cursor-pointer rounded-lg py-2 px-4  '>
-								{user ?
-									<div onClick={(handleSignOut)}>
-										Log Out
-									</div>
-									:
+								{ user && user.isAnonymous ? (
+									// If the user is signed in anonymously, only show "Get started" button
 									<Link to='/signup'>
 										Get started
 									</Link>
+									) 
+									: 
+									(
+										user ? (
+											// If the user is signed in with a provider, email, or SMS, show "Log Out" button
+											<div onClick={handleSignOut}>
+												Log Out
+											</div>
+										)
+										: 
+										(
+											<Link to='/signup'>
+												Get started
+											</Link>
+										) 
+									)
 								}
 							</div>
 							

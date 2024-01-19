@@ -2,69 +2,136 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from './Layout';
 import { db, auth } from "../../firebase";
-import { collection, getDocs, where, addDoc  } from "firebase/firestore";
+import { collection, getDocs, where, addDoc, orderBy, doc, deleteDoc, query  } from "firebase/firestore";
 import Dropdown from '../Modules/Menu';
+import { isEmpty } from "lodash";
 
 const Chat = () => {
-	const currentUser = auth.currentUser;
+  const currentUser = auth.currentUser;
+  
   const [chatInstances, setChatInstances] = useState([]);
   const [activeChatId, setActiveChatId] = useState(null);
   const [counter, setCounter] = useState(0);
   
-	const createNewChat = async () => {
-    const newChatId = counter + 1; // Increment the counter
-    setCounter(newChatId);
-    try {
-      const newChatRef = await addDoc(collection(db, 'chats'), {
-        userId: currentUser?.uid,
-      });
 
-      const newChatInstance = {
-        id: newChatRef.id,
-        userId: currentUser?.uid,
-      };
-
-      const newChatInstances = [...chatInstances, newChatInstance];
-      setChatInstances(newChatInstances);
-
-      if (!activeChatId) {
-        setActiveChatId(newChatRef.id);
-      }
-    } catch (error) {
-      console.error('Error creating new chat:', error);
-    }
-  };
   useEffect(() => {
+    console.log('Current User ID:', currentUser?.uid);
     const fetchChatInstances = async () => {
       try {
         const querySnapshot = await getDocs(
           collection(db, 'chats'),
-          where('userId', '==', currentUser?.uid)
+         
+          orderBy('createdAt', 'desc')
         );
-        const fetchedChatInstances = querySnapshot.docs.map((doc) => ({
-          id: doc.id,
-          ...doc.data(),
-        }));
-        setChatInstances(fetchedChatInstances);
-        // If there are no chat instances, create a new one
-        if (fetchedChatInstances.length === 0) {
+        console.log('Current User ID:', currentUser?.uid);
+        console.log('Fetched Chat Instances:', querySnapshot.docs.map(doc => doc.data()));
+
+        const fetchedChatInstances = querySnapshot.docs
+          .filter(doc => doc.data().userId === currentUser?.uid)
+            .map(doc => ({
+              id: doc.id,
+              chatNumber: doc.data().chatNumber,
+              ...doc.data(),
+            }));
+
+        // Order the chat instances in descending order based on 'createdAt'
+      const orderedChatInstances = fetchedChatInstances.sort((a, b) => b.createdAt - a.createdAt);
+
+        setChatInstances(orderedChatInstances);
+        console.log(orderedChatInstances);
+
+        if (orderedChatInstances.length === 0) {
           createNewChat();
         } else {
-          // Set the active chat to the first chat instance
-          setActiveChatId(fetchedChatInstances[0].id);
+          setActiveChatId(orderedChatInstances[0].id);
         }
       } catch (error) {
         console.error('Error fetching chat instances:', error);
       }
     };
 
-    if (currentUser) {
+    if (currentUser ) {
       fetchChatInstances();
     }
   }, [currentUser]);
-	    
-	const handleChatClick = (chatId) => {
-		setActiveChatId(chatId);
+  
+  const createNewChat = async () => {
+    try {
+      const userChatsQuery = query(collection(db, 'chats'), orderBy('createdAt', 'desc'));
+      const userChatsSnapshot = await getDocs(userChatsQuery);
+  
+      let nextChatNumber = 1;
+      if (!isEmpty(userChatsSnapshot.docs)) {
+        const userChats = userChatsSnapshot.docs
+          .filter(doc => doc.data().userId === currentUser?.uid);
+  
+        if (!isEmpty(userChats)) {
+          const lastChatInstance = userChats[0].data();
+          nextChatNumber = lastChatInstance.chatNumber + 1;
+        }
+      }
+
+      const newChatRef = await addDoc(collection(db, 'chats'), {
+        chatNumber: nextChatNumber,
+        userId: currentUser?.uid,
+        createdAt: new Date(),
+      });
+
+      // Create a new 'messages' collection within the chat instance
+      const messagesCollectionRef = collection(db, `chats/${newChatRef.id}/messages`);
+      
+      // Add an initial message (if needed)
+      await addDoc(messagesCollectionRef, {
+        message: 'Welcome to the chat!',
+        who: 'bot',
+        timestamp: new Date(),
+      });
+
+      const newChatInstance = {
+        id: newChatRef.id,
+        chatNumber: nextChatNumber,
+        userId: currentUser?.uid,
+        createdAt: new Date(),
+      };
+
+      setChatInstances([newChatInstance, ...chatInstances]);
+      
+      setActiveChatId(newChatRef.id);
+      console.log(activeChatId);
+      
+    } catch (error) {
+      console.error('Error creating new chat:', error);
+    }
+  };
+
+  const deleteChatInstance = async (chatId) => {
+    try {
+      await deleteDoc(doc(db, 'chats', chatId));
+      setChatInstances(chatInstances.filter(chat => chat.id !== chatId));
+
+      // If the deleted chat was the active one, clear the active chat
+      if (activeChatId === chatId) {
+        setActiveChatId(null);
+      }
+    } catch (error) {
+      console.error('Error deleting chat instance:', error);
+    }
+  };
+
+  const handleChatClick = (chatId) => {
+    setActiveChatId(chatId);
+  };
+
+  const getChatInstanceName = (chatInstance) => {
+    const chatNumber = chatInstance.chatNumber;
+    const userInitials = currentUser?.displayName
+      ? currentUser.displayName
+        .split(' ')
+        .map(word => word[0])
+        .join('')
+      : 'Guest';
+
+    return `Chat ${chatNumber} - ${userInitials}`;
   };
 
   return (
@@ -78,19 +145,20 @@ const Chat = () => {
                   Name
                 </Link>
               </div>
-              <div onClick={createNewChat} className=''>
+              <div onClick={createNewChat} className='cursor-pointer'>
                 New +
               </div>
             </div>
             <div className='mt-10'>
               <ul>
-	              {chatInstances.map((chatInstance) => (
+                {chatInstances.map((chatInstance) => (
                   <li
                     key={chatInstance.id}
                     onClick={() => handleChatClick(chatInstance.id)}
                     className={activeChatId === chatInstance.id ? 'underline underline-offset-4 mt-3' : 'mt-3'}
                   >
-                    {chatInstance.userId === currentUser.uid ? `Chats` : `Chats`}
+                    {getChatInstanceName(chatInstance)}
+                    <button onClick={() => deleteChatInstance(chatInstance.id)}>Delete</button>
                   </li>
                 ))}
               </ul>
@@ -101,7 +169,7 @@ const Chat = () => {
           </div>
         </div>
         <div className='w-full py-4 px-6 bg-zinc-700 justify-center flex '>
-        { activeChatId && <Layout id={activeChatId}  /> }
+          { activeChatId && <Layout id={activeChatId}  /> }
         </div>
       </div>
     </>

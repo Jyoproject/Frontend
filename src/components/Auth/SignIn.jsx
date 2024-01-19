@@ -18,6 +18,7 @@ const Signin = () => {
 			setValue(data.user.email)
 			localStorage.setItem("email",data.user.email)
 			navigate('/chat'); 
+			
 		})
 		.catch((error) => {
 			// Handle Errors here.

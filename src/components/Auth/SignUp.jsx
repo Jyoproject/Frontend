@@ -1,7 +1,7 @@
 // import router from "next/router"
 import React, {  useEffect, useState } from "react";
 // import { signIn } from "next-auth/react"
-import {signInWithPopup,FacebookAuthProvider, OAuthProvider} from "firebase/auth";
+import {signInWithPopup,FacebookAuthProvider, OAuthProvider, setPersistence, browserSessionPersistence} from "firebase/auth";
 import {auth, googleProvider, facebookProvider, appleProvider} from "../../firebase";
 import { useNavigate } from 'react-router-dom';
 
@@ -12,26 +12,39 @@ import EmailPasswordSignUp from "./EmailPasswordSignUp";
 const Signin = () => {
 	const navigate = useNavigate();
 	const [value,setValue] = useState('')
+	
 	const googleSignin =()=>{
-		signInWithPopup(auth, googleProvider)
-		.then((data)=>{
-			setValue(data.user.email)
-			localStorage.setItem("email",data.user.email)
-			navigate('/chat'); 
-		})
-		.catch((error) => {
-			// Handle Errors here.
-			const errorCode = error.code;
-			const errorMessage = error.message;
-			// The email of the user's account used.
-			const email = error.user?.email;
-			console.log(errorMessage)
-			// The AuthCredential type that was used.
-			// const credential = FacebookAuthProvider.credentialFromError(error);
-
-			// ...
-		});
+		setPersistence(auth, browserSessionPersistence)
+			.then(() => {
+				// In memory persistence will be applied to the signed in Google user
+				// even though the persistence was set to 'none' and a page redirect
+				// occurred.
+				console.log(" in memory persistence")
+				return( 
+					signInWithPopup(auth, googleProvider)
+					.then((data)=>{
+						setValue(data.user.email)
+						localStorage.setItem("email",data.user.email)
+						navigate('/chat'); 
+						
+					})
+					.catch((error) => {
+						// Handle Errors here.
+						const errorCode = error.code;
+						const errorMessage = error.message;
+						// The email of the user's account used.
+						const email = error.user?.email;
+						console.log(errorMessage)
+					})	
+				)	
+			})
+			.catch((error) => {
+				// Handle Errors here.
+				const errorCode = error.code;
+				const errorMessage = error.message;
+			});
 	}
+	
 
 	const facebookSignin =()=>{
 		signInWithPopup(auth, facebookProvider)
@@ -87,6 +100,8 @@ const Signin = () => {
 				// ...
 			});
 	}
+
+	
 
 	useEffect(()=>{
 		setValue(localStorage.getItem('email'))

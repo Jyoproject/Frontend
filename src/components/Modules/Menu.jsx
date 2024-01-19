@@ -1,7 +1,7 @@
-
+import { useState } from 'react';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Link, useNavigate } from 'react-router-dom';
-import {  signOut } from "firebase/auth";
+import {  Link, useNavigate } from 'react-router-dom';
+import {  signOut, signInAnonymously } from "firebase/auth";
 import {  auth } from "../../firebase";
  
 const Dropdown = () => {
@@ -15,13 +15,22 @@ const Dropdown = () => {
 		  console.log(error)
 	  });
 	}
+
+	const anonymousSignin = async () => {
+		try {
+		  await signInAnonymously(auth);
+			console.log('user signed in successfully')
+		} catch (error) {
+		  console.error('Error signing in anonymously:', error);
+		}
+	};
 	return (
 		<div>
 			<DropdownMenu.Root >
 				<DropdownMenu.Trigger className=" cursor-pointer  flex flex-row  gap-2  pt-1.5 pb-1.5 focus:outline-none">
 					{auth && 
 						<div>
-							{currentUser?.displayName || currentUser?.email || currentUser?.phoneNumber}
+							{currentUser?.displayName || currentUser?.email || currentUser?.phoneNumber || "Guest"}
 						</div>
 					}
 				</DropdownMenu.Trigger>
@@ -29,9 +38,21 @@ const Dropdown = () => {
 					<DropdownMenu.Item  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
 						Settings
 					</DropdownMenu.Item>
-					<DropdownMenu.Item onClick={(handleSignOut)}  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
-						Sign Out
-					</DropdownMenu.Item>
+					{ currentUser && currentUser.isAnonymous ? (
+						<DropdownMenu.Item  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
+							<Link to="/signup">
+								Sign Up
+							</Link>
+						</DropdownMenu.Item>
+
+						)
+						:
+						(
+							<DropdownMenu.Item onClick={(handleSignOut)}  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
+								Sign Out
+							</DropdownMenu.Item>
+						)
+					}
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
 		</div>

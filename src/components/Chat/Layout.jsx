@@ -94,7 +94,9 @@ const InputMessage = ({ sendMessage, onSubmit }) => {
 	);
       };
 
-const Layout = ({id}) => {
+const Layout = ({ id }) => {
+
+	const currentUser = auth.currentUser;
 	const [messages, setMessages] = useState(initialMessages)
 	const [loading, setLoading] = useState(false)
 	const [cookie, setCookie] = useCookies([COOKIE_NAME])
@@ -107,8 +109,28 @@ const Layout = ({id}) => {
 		}
 	}, [cookie, setCookie])
 
+	useEffect(() => {
+		const chatMessagesRef = id ? collection(db, `chats/${id}/messages`) : null;
+
+		const unsubscribe = chatMessagesRef ? onSnapshot(
+		  	query(chatMessagesRef, orderBy('timestamp')), // Order by timestamp or any relevant field
+		  	(snapshot) => {
+		   	 	const allMessages = [];
+	      
+		    		snapshot.forEach((doc) => {
+					const messageData = doc.data();
+					allMessages.push(messageData);
+		   		});
+
+				setMessages(allMessages); // Set all messages
+		  	}
+		) : null;
+	      
+		return () => unsubscribe && unsubscribe();
+	}, [id]);
+
   	// send message to API endpoint
-	  const sendMessage = async (userMessage) => {
+	const sendMessage = async (userMessage) => {
 		setLoading(true);
 		const newMessages = [
 			...messages,
@@ -117,88 +139,48 @@ const Layout = ({id}) => {
 		setMessages(newMessages)
 	    
 		try {
-		  // Send user message to API and get bot response
-		  const response = await fetch('https://backend.advocateally.com/chat', {
-		    method: 'POST',
-		    headers: {
-		      'Content-Type': 'application/json',
-		    },
-		    body: JSON.stringify({ message: userMessage, user: auth.currentUser.uid }),
-		  });
-		  const data = await response.json()
+		  	// Send user message to API and get bot response
+		  	const response = await fetch('https://backend.advocateally.com/chat', {
+		    		method: 'POST',
+		    		headers: {
+		      			'Content-Type': 'application/json',
+		    		},
+		    		body: JSON.stringify({ message: userMessage, user: auth.currentUser.uid }),
+		  	});
+		  	const data = await response.json()
 
-		// strip out white spaces from the bot message
-		const botResponse = data.message.trim()
-		  console.log(botResponse)
-		  setMessages([
-			...newMessages,
-			{ message: botResponse, who: 'bot' },
-		])
+			// strip out white spaces from the bot message
+			const botResponse = data.message.trim()
+		 	console.log(botResponse)
+		  	setMessages([
+				...newMessages,
+				{ message: botResponse, who: 'bot' },
+			])
 
-		  // Save user message and bot response to Firestore
-		  const chatMessagesRef = collection(db, `chats/chat-${id}/messages`); // Assuming 'id' is the chat instance ID
+		  	// Save user message and bot response to Firestore
+		  	const chatMessagesRef = id ? collection(db, `chats/${id}/messages`) : null; // Assuming 'id' is the chat instance ID
 	      
-		  await addDoc(chatMessagesRef, {
-			message: userMessage,
-			who: 'user',
-			timestamp: new Date(), // Use local timestamp for each message
-			authorId: auth.currentUser.uid,
-		});
+		  	await addDoc(chatMessagesRef, {
+				message: userMessage,
+				who: 'user',
+				timestamp: new Date(), // Use local timestamp for each message
+				authorId: auth.currentUser.uid,
+			});
 		
-		      // Save bot response to Firestore as a separate document
-		      await addDoc(chatMessagesRef, {
-			message: botResponse,
-			who: 'bot',
-			timestamp: new Date(), // Use local timestamp for each message
-			// Assuming there's a common field (e.g., 'parentId') to associate user and bot messages
-			parentId: chatMessagesRef.id, // Use a common identifier to group messages
-		      });
-		} catch (error) {
-		  console.error('Error sending message:', error);
+		      	// Save bot response to Firestore as a separate document
+		      	await addDoc(chatMessagesRef, {
+				message: botResponse,
+				who: 'bot',
+				timestamp: new Date(), // Use local timestamp for each message
+				// Assuming there's a common field (e.g., 'parentId') to associate user and bot messages
+				parentId: chatMessagesRef.id, // Use a common identifier to group messages
+		      	});
+		} 
+		catch (error) {
+		  	console.error('Error sending message:', error);
 		}
-	    
 		setLoading(false);
-	      };
-	    
-	      useEffect(() => {
-		const chatMessagesRef = collection(db, `chats/chat-${id}/messages`);
-	      
-		const unsubscribe = onSnapshot(
-		  query(chatMessagesRef, orderBy('timestamp')), // Order by timestamp or any relevant field
-		  (snapshot) => {
-		    const allMessages = [];
-	      
-		    snapshot.forEach((doc) => {
-		      const messageData = doc.data();
-		      allMessages.push(messageData);
-		    });
-	      
-		    // Filter messages for user and bot
-		    const userMessages = allMessages.filter((message) => message.who === 'user');
-		    const botMessages = allMessages.filter((message) => message.who === 'bot');
-	      
-		    console.log('User Messages:', userMessages);
-		    console.log('Bot Messages:', botMessages);
-	      
-		    // Handle the filtered messages as needed (e.g., update state variables)
-		    setMessages(allMessages); // Set all messages
-		    // setUserMessages(userMessages); // Optionally, set user messages
-		    // setBotMessages(botMessages); // Optionally, set bot messages
-		  }
-		);
-	      
-		return () => unsubscribe();
-	      }, [id]);
-	// const createChat = async () => {
-	// 	await addDoc(chatsCollectionRef, {
-	// 		sendMessage,
-	// 		messages,
-	// 		author: {
-	// 			name: auth.currentUser.displayName,
-	// 			id: auth.currentUser.uid
-	// 		}
-	// 	})
-	// }
+	};
 
 	return (
 		<div className="  overflow-auto flex flex-col justify-between w-[70%]  p-6">

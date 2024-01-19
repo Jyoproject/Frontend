@@ -11,7 +11,7 @@ import { useAuth } from './AuthProvider';
 const AuthenticatedRoute = ({ children }) => {
   const { currentUser } = useAuth();
 
-  return currentUser ?  children : <Navigate to="/signin" />;
+  return currentUser ?  children : <Navigate to="/" />;
 };
 
 

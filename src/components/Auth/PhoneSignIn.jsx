@@ -34,7 +34,7 @@ const PhoneSignIn = () => {
         window.confirmationResult = confirmationResult;
         console.log('OTP Sent....!!');
         alert('OTP Sent! Please check your mobile phone!');
-        navigate('/chat')
+        
       })
       .catch((error) => {
         console.log('SMS NOT SENT ERROR....!!');
@@ -50,6 +50,7 @@ const PhoneSignIn = () => {
         const user = result.user;
         console.log(JSON.stringify(user));
         alert('User Verified Successfully!!');
+        navigate('/chat')
       })
       .catch((error) => {
         console.log(JSON.stringify(error));
