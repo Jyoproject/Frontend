@@ -1,48 +1,57 @@
-// import router from "next/router"
-import React, {  useEffect, useState } from "react";
-// import { signIn } from "next-auth/react"
+import React, {  useEffect} from "react";
 import {signInWithPopup,FacebookAuthProvider, OAuthProvider, setPersistence, browserSessionPersistence} from "firebase/auth";
 import {auth, googleProvider, facebookProvider, appleProvider} from "../../firebase";
-import { useNavigate } from 'react-router-dom';
-
+import { useNavigate, useLocation } from 'react-router-dom';
+import axios from "axios";
 import { Link } from 'react-router-dom';
 import PhoneSignIn from "./PhoneSignIn";
 import EmailPasswordSignUp from "./EmailPasswordSignUp";
 
 const Signin = () => {
 	const navigate = useNavigate();
-	const [value,setValue] = useState('')
+  	const location = useLocation();
+
+  	useEffect(() => {
+    		let authToken = sessionStorage.getItem("Auth Token");
+		const search = location.search;
+		
+		const id=new URLSearchParams(search).get("code");
+		sessionStorage.setItem("Auth Code",id);
+		const code =    sessionStorage.getItem("Auth Code");
+    		console.log(id);//12345
+
+    		if (authToken) {
+			navigate("/chat");
+		}
+		else{
+			navigate("/signup");
+		}
+  	},[])
+
 	
 	const googleSignin =()=>{
-		setPersistence(auth, browserSessionPersistence)
-			.then(() => {
-				// In memory persistence will be applied to the signed in Google user
-				// even though the persistence was set to 'none' and a page redirect
-				// occurred.
-				console.log(" in memory persistence")
-				return( 
-					signInWithPopup(auth, googleProvider)
-					.then((data)=>{
-						setValue(data.user.email)
-						localStorage.setItem("email",data.user.email)
-						navigate('/chat'); 
-						
-					})
-					.catch((error) => {
-						// Handle Errors here.
-						const errorCode = error.code;
-						const errorMessage = error.message;
-						// The email of the user's account used.
-						const email = error.user?.email;
-						console.log(errorMessage)
-					})	
-				)	
+		signInWithPopup(auth, googleProvider)
+			.then((data)=>{
+				// This gives you a Google Access Token. You can use it to access the Google API.
+				const credential = googleProvider.credentialFromResult(data);
+				console.log(credential.accessToken)
+				const token = credential.accessToken;
+				// The signed-in user info.
+				const user = data.user;
+				console.log(data)
+				let authToken = sessionStorage.setItem("Auth Token", data?._tokenResponse?.idToken);
+				console.log(authToken);
+				navigate('/chat'); 		
 			})
 			.catch((error) => {
 				// Handle Errors here.
 				const errorCode = error.code;
 				const errorMessage = error.message;
-			});
+				// The email of the user's account used.
+				const email = error.user?.email;
+				console.log(errorMessage)
+			});	
+			
 	}
 	
 
@@ -53,9 +62,10 @@ const Signin = () => {
 				const user = result.user;
 
 				// This gives you a Facebook Access Token. You can use it to access the Facebook API.
-				const credential = FacebookAuthProvider.credentialFromResult(result);
-				const accessToken = credential.accessToken;
-
+        			const credential = FacebookAuthProvider.credentialFromResult(result);
+        			const accessToken = credential.accessToken;
+        			let authToken = sessionStorage.setItem("Auth Token", result?._tokenResponse?.idToken);
+				navigate('/chat')
 				// IdP data available using getAdditionalUserInfo(result)
 				// ...
 			})
@@ -67,7 +77,7 @@ const Signin = () => {
 				const email = error.customData.email;
 				// The AuthCredential type that was used.
 				const credential = FacebookAuthProvider.credentialFromError(error);
-				console.log(errorMessage)
+				console.log(errorMessage, email, credential, errorCode)
 
 				// ...
 			});
@@ -100,13 +110,6 @@ const Signin = () => {
 				// ...
 			});
 	}
-
-	
-
-	useEffect(()=>{
-		setValue(localStorage.getItem('email'))
-	})
-	
 
 	return (
 		<div className="flex flex-row  w-full bg-[#111111] dark:bg-white text-white dark:text-black">

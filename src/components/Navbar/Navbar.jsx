@@ -61,19 +61,11 @@ const Navbar = () => {
 				
 				<div className="md:flex hidden flex-row gap-10">		
 					<div className="cursor-pointer"  >
-					{ user && user.isAnonymous ? (
-									// If the user is signed in anonymously, only show "Get started" button
-									<Link onClick={anonymousSignin} to="/chat">
-								Chat	
-							</Link>
-									) 
-									: 
-									(
+					
 										<Link to="/chat">
 											Chat
 										</Link>
-									)
-								}
+							
 							
 							
 						

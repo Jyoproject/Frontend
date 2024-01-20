@@ -155,10 +155,14 @@ const Chat = () => {
                   <li
                     key={chatInstance.id}
                     onClick={() => handleChatClick(chatInstance.id)}
-                    className={activeChatId === chatInstance.id ? 'underline underline-offset-4 mt-3' : 'mt-3'}
+                    className={activeChatId === chatInstance.id ? ' mt-3 flex flex-row gap-4 items-center justify-between border p-2 rounded-lg cursor-pointer' : 'mt-3 flex flex-row gap-4 items-center justify-between cursor-pointer p-2'}
                   >
-                    {getChatInstanceName(chatInstance)}
-                    <button onClick={() => deleteChatInstance(chatInstance.id)}>Delete</button>
+                    <div>
+                      {getChatInstanceName(chatInstance)}
+                    </div>
+                    <button onClick={() => deleteChatInstance(chatInstance.id)}>
+                      <img src="/images/delete.svg" alt="delete" draggable="false" />
+                    </button>
                   </li>
                 ))}
               </ul>

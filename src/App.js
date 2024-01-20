@@ -24,11 +24,12 @@ function App() {
           <Route path="/"  element={<Landing />} />
           <Route path='/signin' element={<Auth />}/>
           <Route path='/signup' element={<SignUp />}/>
-            <Route exact path='/chat' element={
+          <Route path='/chat' element={<Chat />}/>
+            {/* <Route exact path='/chat' element={
               <AuthenticatedRoute>
                 <Chat />
               </AuthenticatedRoute>
-            }/>
+            }/> */}
         </Routes>
       </div>
       <Footer />
