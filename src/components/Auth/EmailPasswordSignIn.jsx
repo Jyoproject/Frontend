@@ -10,7 +10,7 @@ const EmailPasswordSignIn = () => {
   // initialised auth instance
   const auth = getAuth();
 
-// handle form submit
+  // handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
@@ -22,7 +22,7 @@ const EmailPasswordSignIn = () => {
       .then((userCredential) => {
         // Signed in
         console.log(userCredential.user);
-	navigate('/chat')
+	      navigate('/chat')
         // ...
       })
       .catch((err) => {

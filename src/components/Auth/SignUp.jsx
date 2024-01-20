@@ -131,7 +131,7 @@ const Signin = () => {
 				</div>
 				<div className="flex flex-col justify-center gap-20 items-center h-screen">
 					<div className="flex flex-col justify-center items-center gap-8">
-						<div className="font-bold text-4xl">
+					 	<div className="font-bold text-4xl">
 							Welcome!
 						</div>
 						<div>

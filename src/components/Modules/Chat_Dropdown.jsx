@@ -1,0 +1,62 @@
+import { useState } from 'react';
+import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
+import {  Link, useNavigate } from 'react-router-dom';
+import {  signOut, signInAnonymously } from "firebase/auth";
+import {  auth } from "../../firebase";
+ 
+const Chat_Dropdown = () => {
+	const currentUser = auth.currentUser;
+	const navigate = useNavigate();
+	const handleSignOut = () => {
+		signOut(auth).then(() => {
+			navigate('/'); 
+			// Sign-out successful.
+		}).catch((error) => {
+		  console.log(error)
+	  });
+	}
+
+	const anonymousSignin = async () => {
+		try {
+		  await signInAnonymously(auth);
+			console.log('user signed in successfully')
+		} catch (error) {
+		  console.error('Error signing in anonymously:', error);
+		}
+	};
+	return (
+		<div>
+			<DropdownMenu.Root >
+				<DropdownMenu.Trigger className=" cursor-pointer  flex flex-row  gap-2  pt-1.5 pb-1.5 focus:outline-none">
+					{auth && 
+						<div>
+							{currentUser?.displayName || currentUser?.email || currentUser?.phoneNumber || "Guest"}
+						</div>
+					}
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content sideOffset={8} align="start" className="z-100  md:backdrop-blur-sm md:bg-gradient-to-br from-black/30 via-black/20 to-black/10  md:w-60 w-40   md:pt-2 pt-1 pb-1 md:pb-2 border-2 flex flex-col  rounded-lg  ">
+					<DropdownMenu.Item  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
+						Settings
+					</DropdownMenu.Item>
+					{ currentUser && currentUser.isAnonymous ? (
+						<DropdownMenu.Item  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
+							<Link to="/signup">
+								Sign Up
+							</Link>
+						</DropdownMenu.Item>
+
+						)
+						:
+						(
+							<DropdownMenu.Item onClick={(handleSignOut)}  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
+								Sign Out
+							</DropdownMenu.Item>
+						)
+					}
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
+		</div>
+	)
+}
+
+export default Chat_Dropdown

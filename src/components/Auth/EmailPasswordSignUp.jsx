@@ -10,7 +10,7 @@ const EmailPasswordSignUp = () => {
   // initialised auth instance
   const auth = getAuth();
 
-// handle form submit
+  // handle form submit
   const handleSubmit = (e) => {
     e.preventDefault();
     setError("");
@@ -22,7 +22,7 @@ const EmailPasswordSignUp = () => {
       .then((userCredential) => {
         // Signed up
         console.log(userCredential.user);
-	navigate('/chat')
+	      navigate('/chat')
         // ...
       })
       .catch((err) => {
@@ -44,17 +44,6 @@ const EmailPasswordSignUp = () => {
     }));
   };
 
-  setPersistence(auth, browserSessionPersistence)
-    .then(() => {
-      return  (
-        createUserWithEmailAndPassword(auth, input.email, input.password));
-        console.log('Auth persistence enabled');
-      
-      
-    })
-    .catch((error) => {
-      console.error('Error setting auth persistence:', error);
-    });
 
   return (
     <div className="form-body">

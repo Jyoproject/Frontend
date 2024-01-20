@@ -9,7 +9,7 @@ import { Link } from 'react-router-dom';
 import EmailPasswordSignUp from "./EmailPasswordSignUp";
 
 
-const SignIn_M = () => {
+const SignUp_M = () => {
 	const navigate = useNavigate();
 
 
@@ -143,11 +143,11 @@ const SignIn_M = () => {
 					</div>
 					<div className="flex flex-col items-center gap-3 mt-10">
 						<div className="text-white">
-							Create an account ?
+							Already have an account ?
 						</div>
 						<button>
-							<Link to="/signup" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
-								SignUp
+							<Link to="/signin" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
+								SignIn
 							</Link>
 						</button>
 					</div>
@@ -156,7 +156,7 @@ const SignIn_M = () => {
 	)
 }
 
-export default SignIn_M
+export default SignUp_M
 
 
 

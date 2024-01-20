@@ -1,7 +1,4 @@
-
-import { useContext, useState, useEffect } from 'react';
-// import { useSession } from 'next-auth/react';
-// import { useEffect, useState } from "react"
+import { useContext, useState, useEffect } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { ColorMode, ThemeContext } from '../../modules/ThemeProvider';
 import Dropdown_M from '../Modules/Dropdown_M';
