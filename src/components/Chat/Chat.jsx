@@ -2,9 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Layout from './Layout';
 import { db, auth } from "../../firebase";
-import { collection, getDocs, where, addDoc, orderBy, doc, deleteDoc, query  } from "firebase/firestore";
+import { collection, getDocs, where, addDoc, orderBy, doc, deleteDoc, query, onSnapshot  } from "firebase/firestore";
 import Dropdown from '../Modules/Menu';
 import { isEmpty } from "lodash";
+import { onAuthStateChanged } from 'firebase/auth';
 
 const Chat = () => {
   const currentUser = auth.currentUser;
@@ -15,45 +16,49 @@ const Chat = () => {
   
 
   useEffect(() => {
-    console.log('Current User ID:', currentUser?.uid);
-    const fetchChatInstances = async () => {
-      try {
-        const querySnapshot = await getDocs(
-          collection(db, 'chats'),
-         
-          orderBy('createdAt', 'desc')
-        );
-        console.log('Current User ID:', currentUser?.uid);
-        console.log('Fetched Chat Instances:', querySnapshot.docs.map(doc => doc.data()));
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // User is signed in
+        fetchChatInstances();
+      } else {
+        <>
+          Loading...
+        </>
+      }
+    });
 
-        const fetchedChatInstances = querySnapshot.docs
-          .filter(doc => doc.data().userId === currentUser?.uid)
-            .map(doc => ({
-              id: doc.id,
-              chatNumber: doc.data().chatNumber,
-              ...doc.data(),
-            }));
+    return () => unsubscribe();
+  }, []);
 
-        // Order the chat instances in descending order based on 'createdAt'
+  const fetchChatInstances = async () => {
+    try {
+      const querySnapshot = await getDocs(
+        collection(db, 'chats'),
+        orderBy('createdAt', 'desc')
+      );
+
+      const fetchedChatInstances = querySnapshot.docs
+        .filter(doc => doc.data().userId === auth.currentUser?.uid)
+        .map(doc => ({
+          id: doc.id,
+          chatNumber: doc.data().chatNumber,
+          ...doc.data(),
+        }));
+
+      // Order the chat instances in descending order based on 'createdAt'
       const orderedChatInstances = fetchedChatInstances.sort((a, b) => b.createdAt - a.createdAt);
 
-        setChatInstances(orderedChatInstances);
-        console.log(orderedChatInstances);
+      setChatInstances(orderedChatInstances);
 
-        if (orderedChatInstances.length === 0) {
-          createNewChat();
-        } else {
-          setActiveChatId(orderedChatInstances[0].id);
-        }
-      } catch (error) {
-        console.error('Error fetching chat instances:', error);
+      if (orderedChatInstances.length === 0) {
+        createNewChat();
+      } else {
+        setActiveChatId(orderedChatInstances[0].id);
       }
-    };
-
-    if (currentUser ) {
-      fetchChatInstances();
+    } catch (error) {
+      console.error('Error fetching chat instances:', error);
     }
-  }, [currentUser]);
+  };
   
   const createNewChat = async () => {
     try {
