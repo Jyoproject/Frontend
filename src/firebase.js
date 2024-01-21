@@ -4,7 +4,7 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import 'firebase/compat/auth';
-import {getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, setPersistence, browserSessionPersistence, signInAnonymously, onAuthStateChanged} from "firebase/auth";
+import {getAuth, GoogleAuthProvider, FacebookAuthProvider, OAuthProvider, setPersistence, browserSessionPersistence,  onAuthStateChanged} from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -28,17 +28,7 @@ export default firebase
 
 export const db = getFirestore(app);
 export const auth = getAuth(app);
-const signInAnonymouslyIfNeeded = async () => {
-  if (!auth.currentUser) {
-    try {
-      await signInAnonymously(auth);
-    } catch (error) {
-      console.error('Error signing in anonymously:', error);
-    }
-  }
-};
 
-signInAnonymouslyIfNeeded();
 
 onAuthStateChanged(auth, (user) => {
   // Handle auth state changes

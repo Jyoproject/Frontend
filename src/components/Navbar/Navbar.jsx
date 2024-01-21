@@ -56,20 +56,29 @@ const Navbar = () => {
 			:
 			<div className="flex  text-black dark:text-white flex-row  w-full md:py-10 md:justify-around  z-20 md:items-center pl-5 md:pl-0">
 				
-				<div className="md:flex hidden flex-row gap-10">		
-					<div className="cursor-pointer"  >
+				<div className="md:flex hidden flex-row gap-10">
+					{user ? 
+						<div className="cursor-pointer"  >
+							<Link to="/chat">
+								Chat
+							</Link>					
+						</div>
+						:
+						<div className='cursor-pointer'>
+							<Link to="signup">
+								Chat
+							</Link>
+						</div>
+					}		
 					
-										<Link to="/chat">
-											Chat
-										</Link>
-							
-							
-							
-						
-					</div>
 					<div className="cursor-pointer" > 
 						Contact Us
 					</div>
+					<Link to="/chat">
+						<div className="cursor-pointer" onClick={anonymousSignin} > 
+							Trial
+						</div>
+					</Link>		
 				</div>
 				<div className="text-2xl font-medium pt-5 md:pt-0  cursor-pointer flex items-center "  >
 					<Link to="/">

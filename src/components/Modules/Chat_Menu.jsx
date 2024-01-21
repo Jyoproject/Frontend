@@ -22,52 +22,58 @@ const Chat_Menu = () => {
 	
 
 	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-		  if (user) {
-		    // User is signed in
-		    fetchChatInstances();
-		  } else {
-		    <>
-		      Loading...
-		    </>
+		const fetchChatInstances = async () => {
+		  try {
+		    if (!currentUser) {
+		      // User is not authenticated, handle accordingly
+		      console.error('User not authenticated.');
+		      return;
+		    }
+	      
+		    const querySnapshot = await getDocs(
+		      collection(db, 'chats'),
+		      orderBy('createdAt', 'desc')
+		    );
+	      
+		    console.log('Current User ID:', currentUser?.uid);
+		    console.log('Fetched Chat Instances:', querySnapshot.docs.map(doc => doc.data()));
+	      
+		    const fetchedChatInstances = querySnapshot.docs
+		      .filter(doc => doc.data().userId === currentUser?.uid)
+		      .map(doc => ({
+			id: doc.id,
+			chatNumber: doc.data().chatNumber,
+			...doc.data(),
+		      }));
+	      
+		    // Order the chat instances in descending order based on 'createdAt'
+		    const orderedChatInstances = fetchedChatInstances.sort((a, b) => b.createdAt - a.createdAt);
+	      
+		    setChatInstances(orderedChatInstances);
+		    console.log(orderedChatInstances);
+	      
+		    if (orderedChatInstances.length === 0) {
+		      createNewChat();
+		    } else {
+		      setActiveChatId(orderedChatInstances[0].id);
+		    }
+		  } catch (error) {
+		    console.error('Error fetching chat instances:', error);
 		  }
-		});
-	    
-		return () => unsubscribe();
-	      }, []);
-	    
-	      const fetchChatInstances = async () => {
-		try {
-		  const querySnapshot = await getDocs(
-		    collection(db, 'chats'),
-		    orderBy('createdAt', 'desc')
-		  );
-	    
-		  const fetchedChatInstances = querySnapshot.docs
-		    .filter(doc => doc.data().userId === auth.currentUser?.uid)
-		    .map(doc => ({
-		      id: doc.id,
-		      chatNumber: doc.data().chatNumber,
-		      ...doc.data(),
-		    }));
-	    
-		  // Order the chat instances in descending order based on 'createdAt'
-		  const orderedChatInstances = fetchedChatInstances.sort((a, b) => b.createdAt - a.createdAt);
-	    
-		  setChatInstances(orderedChatInstances);
-	    
-		  if (orderedChatInstances.length === 0) {
-		    createNewChat();
-		  } else {
-		    setActiveChatId(orderedChatInstances[0].id);
-		  }
-		} catch (error) {
-		  console.error('Error fetching chat instances:', error);
+		};
+	      
+		if (currentUser) {
+		  fetchChatInstances();
 		}
-	      };
+	      }, [currentUser]);
 	
 	const createNewChat = async () => {
 	try {
+		if (!auth.currentUser) {
+			// User is not authenticated, handle accordingly
+			console.log('User not authenticated.');
+			return;
+		      }
 	const userChatsQuery = query(collection(db, 'chats'), orderBy('createdAt', 'desc'));
 	const userChatsSnapshot = await getDocs(userChatsQuery);
 	
