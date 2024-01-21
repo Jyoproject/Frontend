@@ -4,7 +4,7 @@ import Landing from './components/Landing/Landing';
 import Navbar from './components/Navbar/Navbar';
 import Auth from './components/Auth/Auth.jsx';
 import CreateUser from './components/Auth/CreateUser.jsx';
-import Chat from './components/Chat/Chat';
+import ChatMain from './components/Chat/ChatMain';
 import Footer from './components/Footer/Footer';
 import { useAuth } from './AuthProvider';
 
@@ -24,7 +24,7 @@ function App() {
           <Route path="/"  element={<Landing />} />
           <Route path='/signin' element={<Auth />}/>
           <Route path='/signup' element={<CreateUser />}/>
-          <Route path='/chat' element={<Chat />}/>
+          <Route path='/chat' element={<ChatMain />}/>
             {/* <Route exact path='/chat' element={
               <AuthenticatedRoute>
                 <Chat />

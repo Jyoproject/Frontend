@@ -183,7 +183,7 @@ const Layout = ({ id }) => {
 	};
 
 	return (
-		<div className="  overflow-auto flex flex-col justify-between w-[70%]  p-6">
+		<div className="  overflow-auto flex flex-col justify-between lg:w-[70%] h-screen lg:h-full  p-6">
 			<div>
 				{messages.map(({ message, who }, index) => (
 					<ChatLine key={index} who={who} message={message} />
