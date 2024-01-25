@@ -12,10 +12,12 @@ import { onAuthStateChanged } from 'firebase/auth'; // Import onAuthStateChanged
 
 function App() {
   const [isUserSignedIn, setIsUserSignedIn] = useState(false);
+  const [isUserAnonymous, setIsUserAnonymous] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (user) => {
       setIsUserSignedIn(!!user);
+      setIsUserAnonymous(user?.isAnonymous || false);
     });
 
     return () => unsubscribe();
@@ -23,12 +25,12 @@ function App() {
 
   const AuthRoute = ({ element }) => {
     // Redirect to chat if the user is signed in, otherwise allow access to Auth
-    return isUserSignedIn ? <Navigate to="/chat" /> : element;
+    return isUserSignedIn && isUserAnonymous ? element : <Navigate to="/chat" />;
   };
 
   const SignUpRoute = ({ element }) => {
     // Redirect to chat if the user is signed in, otherwise allow access to CreateUser
-    return isUserSignedIn ? <Navigate to="/chat" /> : element;
+    return isUserSignedIn && isUserAnonymous ? element : <Navigate to="/chat" />;
   };
 
   return (

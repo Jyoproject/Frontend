@@ -32,7 +32,11 @@ const Dropdown = () => {
 					{ currentUser && currentUser.isAnonymous ? (
 						<DropdownMenu.Item  className='focus:outline-none cursor-pointer hover:underline-offset-2 hover:underline hover:bg-white/20 p-2'>
 							<Link to="/signup">
+								<div>
 								Sign Up
+
+								</div>
+								
 							</Link>
 						</DropdownMenu.Item>
 
