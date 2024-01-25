@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Layout from './Layout';
 import { db, auth } from "../../firebase";
 import { collection, getDocs, where, addDoc, orderBy, doc, deleteDoc, query, onSnapshot  } from "firebase/firestore";
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { HamburgerMenuIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { isEmpty } from "lodash";
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 
 const Chat_M = () => {
 	const [open, setOpen] = React.useState(false);
+  const navigate = useNavigate();
 	const [user, setUser] = useState(null);
   const currentUser = auth.currentUser;
   

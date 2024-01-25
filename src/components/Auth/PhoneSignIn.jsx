@@ -33,12 +33,10 @@ const PhoneSignIn = () => {
       .then((confirmationResult) => {
         window.confirmationResult = confirmationResult;
         console.log('OTP Sent....!!');
-        alert('OTP Sent! Please check your mobile phone!');
         
       })
       .catch((error) => {
         console.log('SMS NOT SENT ERROR....!!');
-        alert('Error!!! OTP Not Sent! Please add country code as well!');
       });
   };
 
@@ -49,7 +47,6 @@ const PhoneSignIn = () => {
       .then((result) => {
         const user = result.user;
         console.log(JSON.stringify(user));
-        alert('User Verified Successfully!!');
         navigate('/chat')
       })
       .catch((error) => {
@@ -58,8 +55,8 @@ const PhoneSignIn = () => {
   };
 
   return (
-    <div className='flex flex-col justify-center items-center gap-5'>
-      <form onSubmit={onSignInSubmit} className='flex flex-row justify-center items-center gap-5'>
+    <div className='flex flex-col justify-center items-center gap-3'>
+      <form onSubmit={onSignInSubmit} className='flex flex-row justify-center items-center gap-5 '>
         <div id='sign-in-button'></div>
           <input
             type='number'
@@ -74,7 +71,8 @@ const PhoneSignIn = () => {
           Submit
         </button>
       </form>
-      <form onSubmit={onOTPSubmit} className='flex flex-row justify-center items-center gap-5'>
+      <form onSubmit={onOTPSubmit} className='flex flex-row justify-center items-center gap-5 '>
+      <div id='sign-in-button'></div>
         <input
           type='number'
           name='otp'

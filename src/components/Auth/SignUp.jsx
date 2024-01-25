@@ -138,7 +138,7 @@ const Signin = () => {
 							<EmailPasswordSignUp />
 						</div>
 					</div>		
-					<div className="flex flex-row items-center justify-center gap-10 mt-5">
+					<div className="flex flex-row items-center justify-center gap-5 mt-5">
 						<div className="flex flex-col items-center gap-2 ">
 							<div onClick={googleSignin}  className="bg-white dark:bg-black dark:text-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 								Sign In with Google
