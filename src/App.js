@@ -7,6 +7,7 @@ import CreateUser from './components/Auth/CreateUser.jsx';
 import ChatMain from './components/Chat/ChatMain';
 import Footer from './components/Footer/Footer';
 import { useAuth } from './AuthProvider';
+import ChatContainer from './ChatContainer.js';
 
 const AuthenticatedRoute = ({ children }) => {
   const { currentUser } = useAuth();
@@ -31,6 +32,7 @@ function App() {
               </AuthenticatedRoute>
             }/> */}
         </Routes>
+
       </div>
       <Footer />
     </div>

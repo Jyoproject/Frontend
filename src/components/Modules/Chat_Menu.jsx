@@ -10,7 +10,7 @@ import { collection, getDocs,  addDoc, orderBy, doc, deleteDoc, query  } from "f
 
 
 
-const Chat_Menu = () => {
+const Chat_Menu = ({ onChatClick }) => {
 	const [open, setOpen] = React.useState(false);
 	const navigate = useNavigate();
 	const [user, setUser] = useState(null);
@@ -136,7 +136,9 @@ const Chat_Menu = () => {
 	};
 
 	const handleChatClick = (chatId) => {
-	setActiveChatId(chatId);
+		setActiveChatId(chatId);
+		// Call the onChatClick callback with the updated activeChatId
+		onChatClick(chatId);
 	};
 
 	const getChatInstanceName = (chatInstance) => {
