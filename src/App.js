@@ -25,12 +25,12 @@ function App() {
 
   const AuthRoute = ({ element }) => {
     // Redirect to chat if the user is signed in, otherwise allow access to Auth
-    return isUserSignedIn && isUserAnonymous ? element : <Navigate to="/chat" />;
+    return !isUserSignedIn || isUserAnonymous ?  element : <Navigate to="/chat" />;
   };
 
   const SignUpRoute = ({ element }) => {
     // Redirect to chat if the user is signed in, otherwise allow access to CreateUser
-    return isUserSignedIn && isUserAnonymous ? element : <Navigate to="/chat" />;
+    return !isUserSignedIn || isUserAnonymous ? element : <Navigate to="/chat" />;
   };
 
   return (

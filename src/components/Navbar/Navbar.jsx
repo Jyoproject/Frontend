@@ -10,18 +10,20 @@ import { auth } from "../../firebase";
 const Navbar = () => {
 	const navigate = useNavigate();
 
-	const [user, setUser] = useState(null);
+	const [isUserSignedIn, setIsUserSignedIn] = useState(false);
+  	const [isUserAnonymous, setIsUserAnonymous] = useState(false);
 
-	useEffect(() => {
-		const unsubscribe = onAuthStateChanged(auth, (user) => {
-		setUser(user);
-		});
+  	useEffect(() => {
+    		const unsubscribe = onAuthStateChanged(auth, (user) => {
+      			setIsUserSignedIn(!!user);
+      			setIsUserAnonymous(user?.isAnonymous || false);
+    		});
 
-		return () => {
-			unsubscribe();
-			setUser(null);
-		} // Cleanup the listener on unmount
-	}, []);
+    		return () => {
+			unsubscribe()
+			setIsUserSignedIn(null);
+		};
+  	}, []);
 
 	const handleSignOut = () => {
 		signOut(auth).then(() => {
@@ -57,7 +59,7 @@ const Navbar = () => {
 			<div className="flex  text-black dark:text-white flex-row  w-full md:py-10 md:justify-around  z-20 md:items-center pl-5 md:pl-0">
 				
 				<div className="md:flex hidden flex-row gap-10">
-					{user ? 
+					{isUserSignedIn && isUserAnonymous  ? 
 						<div className="cursor-pointer"  >
 							<Link to="/chat">
 								Chat
@@ -65,7 +67,7 @@ const Navbar = () => {
 						</div>
 						:
 						<div className='cursor-pointer'>
-							<Link to="signup">
+							<Link to="/signup">
 								Chat
 							</Link>
 						</div>
@@ -89,7 +91,7 @@ const Navbar = () => {
 				<div className="flex flex-row items-center justify-center gap-4">
 						<div className='flex flex-row items-center gap-10'>
 							<div  className='md:flex hidden flex-row items-center justify-center gap-2 border-2 border-black dark:border-white cursor-pointer rounded-lg py-2 px-4  '>
-								{ user && user.isAnonymous ? (
+								{ isUserSignedIn && isUserAnonymous ? (
 									// If the user is signed in anonymously, only show "Get started" button
 									<Link to='/signup'>
 										Get started
@@ -97,7 +99,7 @@ const Navbar = () => {
 									) 
 									: 
 									(
-										user ? (
+										isUserSignedIn ? (
 											// If the user is signed in with a provider, email, or SMS, show "Log Out" button
 											<div onClick={handleSignOut}>
 												Log Out
