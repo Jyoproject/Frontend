@@ -106,7 +106,7 @@ const SignUp_M = () => {
 						Name
 					</Link>	
 				</div>
-				<div className="font-medium text-white absolute flex flex-col h-screen justify-end leading-tight pl-[5vh] bottom-0 left-0 pb-10 ">
+				<div className="font-medium text-white absolute flex flex-col h-screen justify-end leading-tight pl-5 bottom-0 left-0 pb-5 ">
 					<span>
 						Copilot,
 					</span>
@@ -114,9 +114,9 @@ const SignUp_M = () => {
 						For Lawyers.
 					</span>
 				</div>
-				<div className="flex flex-col justify-center gap-4 items-center h-screen">
-					<div className="font-bold text-3xl text-white">
-						Good to see you again!
+				<div className="flex flex-col justify-center gap-2 mt-5 items-center lg:h-screen h-full">
+					<div className="font-bold lg:text-3xl text-xl text-white">
+						Welcome!
 					</div>
 					<div>
 						<EmailPasswordSignUp />
@@ -124,24 +124,27 @@ const SignUp_M = () => {
 					<div className="text-white">
 						OR
 					</div>
-					<div className="flex flex-col items-center gap-2 ">
-						<div onClick={googleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
-							Sign In with Google
+					<div className="flex flex-col justify-center items-center gap-4">
+						<div className="flex flex-row items-center gap-2 ">
+							<div onClick={googleSignin}  className="bg-white text-black border-2 cursor-pointer lg:w-48 px-2 lg:px-0 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+								Sign In with Google
+							</div>
+							<div onClick={facebookSignin}  className="bg-white text-black border-2 cursor-pointer lg:w-48 px-2 lg:px-0 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+								Sign In with Facebook
+							</div>	
 						</div>
-						<div onClick={facebookSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
-							Sign In with Facebook
-						</div>
-						<div onClick={appleSignin}  className="bg-white text-black border-2 cursor-pointer w-48 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
+						<div onClick={appleSignin}  className="bg-white text-black border-2 cursor-pointer lg:w-48 px-2 lg:px-0 flex flex-row items-center justify-center pt-2 pb-2 rounded-lg">
 							Sign In with Apple
 						</div>
 					</div>
+					
 					<div className="text-white">
 						OR
 					</div>
 					<div>
 						<PhoneSignIn />
 					</div>
-					<div className="flex flex-col items-center gap-3 mt-10">
+					<div className="flex flex-col items-center gap-3 mt-5">
 						<div className="text-white">
 							Already have an account ?
 						</div>

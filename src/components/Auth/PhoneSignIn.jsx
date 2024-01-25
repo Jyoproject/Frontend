@@ -60,17 +60,19 @@ const PhoneSignIn = () => {
   return (
     <div className='flex flex-col justify-center items-center gap-5'>
       <form onSubmit={onSignInSubmit} className='flex flex-row justify-center items-center gap-5'>
-      <div id='sign-in-button'></div>
-        <input
-          type='number'
-          name='mobile'
-          placeholder='Mobile number'
-          required
-          value={mobile}
-          onChange={handleChange}
-          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-46 p-2 focus:outline-none"   
-        />
-        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>Submit</button>
+        <div id='sign-in-button'></div>
+          <input
+            type='number'
+            name='mobile'
+            placeholder='Mobile number'
+            required
+            value={mobile}
+            onChange={handleChange}
+            className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-46 p-2 focus:outline-none"   
+          />
+        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
+          Submit
+        </button>
       </form>
       <form onSubmit={onOTPSubmit} className='flex flex-row justify-center items-center gap-5'>
         <input
@@ -82,7 +84,9 @@ const PhoneSignIn = () => {
           onChange={handleChange}
           className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-46 p-2 focus:outline-none"   
         />
-        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>Submit</button>
+        <button type='submit' className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-2 px-3 w-32 bg-white text-black dark:bg-black dark:text-white'>
+          Submit
+        </button>
       </form>
     </div>
   );

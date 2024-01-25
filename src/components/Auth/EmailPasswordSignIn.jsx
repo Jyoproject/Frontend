@@ -46,8 +46,8 @@ const EmailPasswordSignIn = () => {
   };
 
   return (
-    <div className="">
-      <form autoComplete="off" className='flex flex-col justify-center items-center gap-5' onSubmit={handleSubmit}>
+    <div className="flex flex-col justify-center items-center gap-4">
+      <form autoComplete="off" className='flex flex-row justify-center items-center gap-2' onSubmit={handleSubmit}>
         <div className="">
           <input
             name="email"
@@ -57,7 +57,7 @@ const EmailPasswordSignIn = () => {
             value={input.email}
             required
             autoComplete="true"
-	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
+            className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
           />
         </div>
         <div className="">
@@ -69,16 +69,17 @@ const EmailPasswordSignIn = () => {
             type="password"
             required
             autoComplete="true"
-	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 w-96 p-2 focus:outline-none" 
+	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
           />
         </div>
-        <div className="btn">
+       
+      </form>
+      <div className="btn">
           {error ? <p className="login-error">{error}</p> : null}
-          <button title="Login" aria-label="Login" type="submit" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center py-3 px-4 w-40 bg-white text-black dark:bg-black dark:text-white'>
+          <button title="Login" aria-label="Login" type="submit" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center lg:py-3 py-2 lg:px-4 px-3 lg:w-40 w-28 bg-white text-black dark:bg-black dark:text-white'>
             Login
           </button>
         </div>
-      </form>
     </div>
   );
 }
