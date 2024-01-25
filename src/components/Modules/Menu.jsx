@@ -15,15 +15,6 @@ const Dropdown = () => {
 		  console.log(error)
 	  });
 	}
-
-	const anonymousSignin = async () => {
-		try {
-		  await signInAnonymously(auth);
-			console.log('user signed in successfully')
-		} catch (error) {
-		  console.error('Error signing in anonymously:', error);
-		}
-	};
 	return (
 		<div>
 			<DropdownMenu.Root >

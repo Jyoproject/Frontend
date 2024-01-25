@@ -47,7 +47,7 @@ const EmailPasswordSignIn = () => {
 
   return (
     <div className="flex flex-col justify-center items-center gap-4">
-      <form autoComplete="off" className='flex flex-row justify-center items-center gap-2' onSubmit={handleSubmit}>
+      <form autoComplete="off" className='flex flex-row lg:flex-col justify-center items-center gap-2' onSubmit={handleSubmit}>
         <div className="">
           <input
             name="email"
