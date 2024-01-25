@@ -46,40 +46,41 @@ const EmailPasswordSignIn = () => {
   };
 
   return (
-    <div className="flex flex-col justify-center items-center gap-4">
-      <form autoComplete="off" className='flex flex-row lg:flex-col justify-center items-center gap-2' onSubmit={handleSubmit}>
-        <div className="">
-          <input
-            name="email"
-            placeholder="Email"
-            type="text"
-            onChange={handleChange}
-            value={input.email}
-            required
-            autoComplete="true"
-            className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
-          />
+    <div >
+      <form autoComplete="off" className="flex flex-col justify-center items-center gap-4"  onSubmit={handleSubmit}>
+        <div className='flex flex-row lg:flex-col justify-center items-center gap-2'>
+          <div className="">
+            <input
+              name="email"
+              placeholder="Email"
+              type="text"
+              onChange={handleChange}
+              value={input.email}
+              required
+              autoComplete="true"
+              className="rounded-lg text-white border-2  border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
+            />
+          </div>
+          <div className="">
+            <input
+              name="password"
+              placeholder="Password"
+              onChange={handleChange}
+              value={input.password}
+              type="password"
+              required
+              autoComplete="true"
+              className="rounded-lg  border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
+            />
+          </div>
         </div>
-        <div className="">
-          <input
-            name="password"
-            placeholder="Password"
-            onChange={handleChange}
-            value={input.password}
-            type="password"
-            required
-            autoComplete="true"
-	          className="rounded-lg border-2 border-[#C4C4C4] bg-[#D6D6D6] bg-opacity-25 lg:w-96 w-44 p-2 focus:outline-none" 
-          />
-        </div>
-       
-      </form>
-      <div className="btn">
+        <div className="btn">
           {error ? <p className="login-error">{error}</p> : null}
           <button title="Login" aria-label="Login" type="submit" className=' border-2 cursor-pointer rounded-lg  flex flex-row items-center justify-center lg:py-3 py-2 lg:px-4 px-3 lg:w-40 w-28 bg-white text-black dark:bg-black dark:text-white'>
             Login
           </button>
         </div>
+      </form>
     </div>
   );
 }
